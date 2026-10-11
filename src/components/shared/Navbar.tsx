@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { Search, UserCheck, Shield, Sparkles, Menu, X, ArrowRightLeft } from "lucide-react";
+import { Search, UserCheck, Shield, Sparkles, Menu, X, ArrowRightLeft, Scissors, Store } from "lucide-react";
 import { BrandLogo } from "./BrandEmblem";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
@@ -24,18 +24,26 @@ export function Navbar() {
         </Link>
 
         {/* Central navigation links */}
-        <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-gray-600 dark:text-gray-300">
+        <nav className="hidden md:flex items-center gap-6 lg:gap-8 text-sm font-medium text-gray-600 dark:text-gray-300">
           <Link
             href="/pro"
-            className="hover:text-gray-950 dark:hover:text-white transition-colors"
+            className="hover:text-gray-950 dark:hover:text-white transition-colors flex items-center gap-1.5"
           >
-            Explorer les postes
+            <Store className="h-4 w-4 text-[#b58e6d]" />
+            <span>Louer un fauteuil</span>
+          </Link>
+          <Link
+            href="/#coiffeurs"
+            className="hover:text-gray-950 dark:hover:text-white transition-colors flex items-center gap-1.5"
+          >
+            <Scissors className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+            <span>Trouver un coiffeur / pro</span>
           </Link>
           <Link
             href="/host"
             className="hover:text-gray-950 dark:hover:text-white transition-colors flex items-center gap-1.5"
           >
-            Mettre mon salon en location
+            <span>Mettre mon salon</span>
             <Badge variant="luxury" size="sm">Hôte</Badge>
           </Link>
           <Link
@@ -43,7 +51,7 @@ export function Navbar() {
             className="hover:text-gray-950 dark:hover:text-white transition-colors flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400"
           >
             <Shield className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
-            Caution & KYC
+            <span>Garanties & KYC</span>
           </Link>
         </nav>
 
@@ -53,12 +61,12 @@ export function Navbar() {
           <button
             onClick={toggleRole}
             className="flex items-center gap-2 rounded-full border border-gray-200 bg-gray-50/80 px-3 py-1.5 text-xs font-semibold text-gray-700 hover:bg-gray-100 dark:border-gray-800 dark:bg-[#12151c] dark:text-gray-300 dark:hover:bg-[#1a1f29] transition-all"
-            title="Basculer instantanément entre votre mode Professionnel et Hôte"
+            title="Basculez entre votre compte Pro (locataire de fauteuil) et Hôte (gérant de salon)"
           >
             <ArrowRightLeft className="h-3.5 w-3.5 text-[#b58e6d]" />
-            <span>Mode :</span>
+            <span>Espace :</span>
             <span className="font-bold text-gray-950 dark:text-white uppercase tracking-wider">
-              {currentRole === "pro" ? "Professionnel" : "Hôte"}
+              {currentRole === "pro" ? "Pro (Locataire)" : "Hôte (Salon)"}
             </span>
           </button>
 
@@ -103,14 +111,21 @@ export function Navbar() {
               onClick={() => setMobileMenuOpen(false)}
               className="px-2 py-1.5 text-gray-800 dark:text-gray-200"
             >
-              Explorer les postes de travail
+              Louer un fauteuil (Espace Pro)
+            </Link>
+            <Link
+              href="/#coiffeurs"
+              onClick={() => setMobileMenuOpen(false)}
+              className="px-2 py-1.5 text-gray-800 dark:text-gray-200"
+            >
+              Trouver un coiffeur ou un pro (Clients)
             </Link>
             <Link
               href="/host"
               onClick={() => setMobileMenuOpen(false)}
               className="px-2 py-1.5 text-gray-800 dark:text-gray-200"
             >
-              Publier un poste (Espace Hôte)
+              Mettre mon salon en location (Espace Hôte)
             </Link>
             <Link
               href="/#garanties"
