@@ -34,6 +34,8 @@ Clients Supabase côté Next.js : [`src/lib/supabase/`](src/lib/supabase/) (`cli
 
 | Route | Contenu |
 |---|---|
+| `/recherche` | Recherche par métier, lieu (autocomplétion IGN, « autour de moi »), durée, dates, budget, équipements ; liste et carte |
+| `/postes/[id]` | Fiche d'un poste : tarifs, caution, horaires, règlement, annulation, devis en direct |
 | `/signup`, `/login` | Inscription (e-mail confirmé), connexion, Google et Apple une fois activés dans Supabase |
 | `/onboarding` | Choix des rôles, profil pro et/ou hôte, dépôt des justificatifs |
 | `/pro`, `/host` | Espaces pro et hôte : état de vérification, réservations, postes |

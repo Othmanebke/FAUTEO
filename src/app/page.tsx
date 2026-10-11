@@ -19,6 +19,7 @@ import { Footer } from "@/components/shared/Footer";
 import { buttonClasses } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { PriceTag } from "@/components/ui/PriceTag";
+import { HeroSearch } from "@/components/search/HeroSearch";
 import { TRADE_LABELS } from "@/lib/labels";
 import { formatCents } from "@/lib/utils";
 
@@ -115,21 +116,25 @@ export default async function HomePage() {
               <p className="max-w-xl text-lg leading-relaxed text-ink-muted">
                 Fauteo relie les salons, barbershops, instituts, ongleries et shops de tatouage aux indépendants qui cherchent un poste équipé, sans engagement long.
               </p>
-              <div className="flex flex-col gap-3 sm:flex-row">
-                <Link href="/signup" className={buttonClasses({ size: "lg" })}>
-                  Je cherche un poste
-                </Link>
-                <Link href="/signup" className={buttonClasses({ size: "lg", variant: "secondary" })}>
-                  Je propose des postes
-                </Link>
-              </div>
-              <ul className="flex flex-wrap gap-2" aria-label="Métiers">
-                {Object.values(TRADE_LABELS).map((label) => (
-                  <li key={label} className="rounded-full bg-canvas-alt px-3 py-1.5 text-sm font-medium text-ink">
+              <HeroSearch />
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="text-sm text-ink-muted">Populaire :</span>
+                {Object.entries(TRADE_LABELS).map(([value, label]) => (
+                  <Link
+                    key={value}
+                    href={`/recherche?metier=${value}`}
+                    className="rounded-full bg-canvas-alt px-3 py-1.5 text-sm font-medium text-ink transition-colors hover:bg-primary-subtle hover:text-primary-ink"
+                  >
                     {label}
-                  </li>
+                  </Link>
                 ))}
-              </ul>
+              </div>
+              <p className="text-[15px] text-ink-muted">
+                Vous avez un lieu ?{" "}
+                <Link href="/signup" className="font-semibold text-primary-ink hover:underline">
+                  Proposez vos postes
+                </Link>
+              </p>
             </div>
             <SampleListing />
           </div>

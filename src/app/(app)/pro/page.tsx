@@ -4,7 +4,7 @@ import { requireRole } from "@/lib/auth/session";
 import { createClient } from "@/lib/supabase/server";
 import { VerificationCard } from "@/components/dashboard/VerificationCard";
 import { EmptyState, PageHeader } from "@/components/dashboard/EmptyState";
-import { Badge } from "@/components/ui/Badge";
+import Link from "next/link";
 import { Card } from "@/components/ui/Card";
 
 export const metadata: Metadata = { title: "Espace pro" };
@@ -27,20 +27,17 @@ export default async function ProDashboardPage() {
         <VerificationCard userId={userId} role="pro" />
 
         <div className="grid gap-4 sm:grid-cols-2">
-          <Card className="flex items-start gap-4">
-            <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-primary-subtle text-primary-ink">
-              <Search className="h-5 w-5" aria-hidden />
-            </span>
-            <div className="space-y-1">
-              <div className="flex items-center gap-2">
+          <Link href="/recherche" className="group block">
+            <Card interactive className="flex h-full items-start gap-4">
+              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-primary-subtle text-primary-ink">
+                <Search className="h-5 w-5" aria-hidden />
+              </span>
+              <div className="space-y-1">
                 <h2 className="font-semibold text-ink">Trouver un poste</h2>
-                <Badge variant="neutral">Bientôt</Badge>
+                <p className="text-sm leading-relaxed text-ink-muted">Recherche par métier, lieu et dates, avec vue liste et carte.</p>
               </div>
-              <p className="text-sm leading-relaxed text-ink-muted">
-                Recherche par métier, ville et dates, avec vue liste et carte.
-              </p>
-            </div>
-          </Card>
+            </Card>
+          </Link>
           <Card className="flex items-start gap-4">
             <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-canvas-alt text-ink">
               <CalendarDays className="h-5 w-5" aria-hidden />

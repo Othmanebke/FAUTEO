@@ -23,6 +23,9 @@ Points que le cahier des charges v1.0 (8 octobre 2026) ne tranche pas ou qui pos
 | 17 | Administration | L'accès admin exige la double authentification (TOTP). | `is_admin` |
 | 18 | Contraste du corail | Le blanc sur #FF6B55 n'atteint que 2,8:1 (WCAG AA exige 4,5:1). Les boutons corail gardent leur fond mais portent un texte encre #252A31 (5,2:1) ; les liens corail utilisent la teinte #C2412F (5,1:1). Pour un texte blanc, il faudrait foncer le fond des boutons. | `globals.css` |
 | 19 | Logo | Symbole redessiné en SVG d'après l'image fournie (`docs/brand`). À remplacer par le fichier vectoriel du designer. | `Logo.tsx` |
+| 21 | Cartographie | Géocodage et fond de carte de l'IGN (Géoplateforme) : gratuits, sans clé, couverture France. CARTO exige désormais une clé. À revoir si l'activité s'étend hors de France. | `components/maps/tiles.ts` |
+| 22 | Réservation le jour même | Possible pour une location à la journée, à la semaine ou au mois tant que la date n'est pas passée ; à l'heure, le créneau doit commencer dans le futur. | `station_unavailability` |
+| 23 | Données de démonstration | 12 postes fictifs (Paris, Lyon) chargés par `supabase/seed.sql`, en local uniquement. | `seed.sql` |
 | 20 | Mot de passe | 10 caractères minimum, au moins une lettre et un chiffre ; e-mail confirmé obligatoire. | `validation/auth.ts` |
 
 ## À valider par un professionnel

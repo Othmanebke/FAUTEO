@@ -153,3 +153,21 @@
     }
   }
 }
+
+/* Cartes Leaflet : fond IGN adouci et contrôles aux couleurs du site */
+.fauteo-tiles {
+  filter: grayscale(1) sepia(0.14) brightness(1.06) contrast(0.9);
+}
+
+.leaflet-container {
+  background: var(--canvas-alt);
+  font-family: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
+}
+
+.leaflet-bar a {
+  color: var(--ink);
+}
+
+.leaflet-control-attribution {
+  font-size: 11px;
+}

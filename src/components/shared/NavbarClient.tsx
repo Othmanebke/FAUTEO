@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState, useTransition } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ArrowLeftRight, ChevronDown, FileCheck2, LayoutGrid, LogOut, Menu, ShieldCheck, User, X } from "lucide-react";
+import { ArrowLeftRight, ChevronDown, FileCheck2, LayoutGrid, LogOut, Menu, Search, ShieldCheck, User, X } from "lucide-react";
 import { buttonClasses } from "@/components/ui/Button";
 import { signOut, switchActiveRole } from "@/app/actions/account";
 import { cn } from "@/lib/utils";
@@ -19,6 +19,7 @@ export interface NavUser {
 }
 
 const PUBLIC_LINKS = [
+  { href: "/recherche", label: "Trouver un poste" },
   { href: "/#fonctionnement", label: "Comment ça marche" },
   { href: "/#hotes", label: "Proposer un poste" },
   { href: "/#confiance", label: "Confiance et sécurité" },
@@ -59,6 +60,7 @@ export function NavbarClient({ user }: { user: NavUser | null }) {
   const accountLinks = user
     ? [
         { href: spaceHref(user), label: "Mon espace", icon: LayoutGrid },
+        { href: "/recherche", label: "Trouver un poste", icon: Search },
         { href: "/account/documents", label: "Mes documents", icon: FileCheck2 },
         { href: "/account", label: "Mon profil", icon: User },
         { href: "/account/securite", label: "Sécurité", icon: ShieldCheck },
@@ -79,6 +81,14 @@ export function NavbarClient({ user }: { user: NavUser | null }) {
               {link.label}
             </Link>
           ))}
+        {user && (
+          <Link
+            href="/recherche"
+            className="rounded-full px-3.5 py-2 text-[15px] font-medium text-ink-muted transition-colors hover:bg-canvas-alt hover:text-ink"
+          >
+            Trouver un poste
+          </Link>
+        )}
         {user && bothRoles && (
           <button
             type="button"

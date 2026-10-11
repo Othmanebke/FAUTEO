@@ -1,4 +1,4 @@
-import type { DocumentType, PriceUnit, StationType, Trade } from "@/types";
+import type { CancellationPolicy, DocumentType, PriceUnit, StationType, Trade } from "@/types";
 
 export const TRADE_LABELS: Record<Trade, string> = {
   coiffure: "Coiffure",
@@ -56,3 +56,14 @@ export const DOCUMENT_LABELS: Record<DocumentType, { title: string; description:
     needsExpiry: true,
   },
 };
+
+export const CANCELLATION_LABELS: Record<CancellationPolicy, { title: string; summary: string }> = {
+  flexible: { title: "Flexible", summary: "Remboursement intégral jusqu'à 24 h avant le début." },
+  moderate: {
+    title: "Modérée",
+    summary: "Remboursement intégral jusqu'à 5 jours avant, 50 % jusqu'à 48 h avant, puis aucun.",
+  },
+  strict: { title: "Stricte", summary: "Remboursement de 50 % jusqu'à 7 jours avant, puis aucun." },
+};
+
+export const WEEKDAY_LABELS = ["", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche"];

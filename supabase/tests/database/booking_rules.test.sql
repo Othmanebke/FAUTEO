@@ -5,7 +5,12 @@ create extension if not exists pgtap with schema extensions;
 create schema tests;
 grant usage on schema tests to anon, authenticated;
 
-select plan(24);
+-- Poste de test (les données de démo du seed coexistent)
+create function tests.station_id() returns uuid language sql stable as $$
+  select id from public.stations where host_id = '00000000-0000-0000-0000-0000000000a1';
+$$;
+
+select plan(25);
 
 -- ---------------------------------------------------------------------
 -- Jeu de données
@@ -54,15 +59,15 @@ values ('00000000-0000-0000-0000-0000000000a1', 'Salon Hélène', '10 rue de Lap
         48.8534, 2.3725, 'Matériel nettoyé après chaque client.');
 
 insert into public.stations (venue_id, title, type, price_day_cents, price_hour_cents, deposit_cents, weekend_surcharge_bps)
-select id, 'Fauteuil barber', 'poste_barber', 6000, 1500, 20000, 2000 from public.venues;
+select id, 'Fauteuil barber', 'poste_barber', 6000, 1500, 20000, 2000 from public.venues where host_id = '00000000-0000-0000-0000-0000000000a1';
 
-select is((select trades from public.stations), array['barbier', 'coiffure']::public.trade[],
+select is((select trades from public.stations where host_id = '00000000-0000-0000-0000-0000000000a1'), array['barbier', 'coiffure']::public.trade[],
           'Les métiers par défaut découlent du type de poste');
 
 insert into public.availability_rules (station_id, weekday, start_time, end_time)
-select s.id, d, '09:00', '19:00' from public.stations s, generate_series(1, 5) d;
+select s.id, d, '09:00', '19:00' from public.stations s, generate_series(1, 5) d where s.host_id = '00000000-0000-0000-0000-0000000000a1';
 insert into public.station_photos (station_id, storage_path)
-select id, '00000000-0000-0000-0000-0000000000a1/poste.jpg' from public.stations;
+select id, '00000000-0000-0000-0000-0000000000a1/poste.jpg' from public.stations where host_id = '00000000-0000-0000-0000-0000000000a1';
 
 -- ---------------------------------------------------------------------
 -- KYC bloquant à la publication
@@ -95,20 +100,20 @@ reset role;
 set local role anon;
 select results_eq(
   format($$select subtotal_cents, pro_fee_cents, host_fee_cents, total_cents, host_payout_cents
-           from public.quote_booking((select id from public.stations), 'day', %L::timestamptz, 1)$$,
+           from public.quote_booking(tests.station_id(), 'day', %L::timestamptz, 1)$$,
          tests.next_monday()),
   $$values (6000, 480, 300, 6480, 5700)$$,
   'Journée à 60 € : frais pro 4,80 €, commission hôte 3 €');
 
 select is(
-  (public.quote_booking((select id from public.stations), 'day', (tests.next_monday() + 5)::timestamptz, 2)).surcharge_cents,
+  (public.quote_booking(tests.station_id(), 'day', (tests.next_monday() + 5)::timestamptz, 2)).surcharge_cents,
   2400, 'Majoration week-end de 20 % appliquée au samedi et au dimanche');
 
 select is(
-  (public.quote_booking((select id from public.stations), 'day', tests.next_monday()::timestamptz, 3)).deposit_strategy,
+  (public.quote_booking(tests.station_id(), 'day', tests.next_monday()::timestamptz, 3)).deposit_strategy,
   'hold'::public.deposit_strategy, 'Location courte : caution par empreinte');
 
-select is((select count(*)::integer from public.search_stations(48.8566, 2.3522, 5000)), 1,
+select ok(exists (select 1 from public.search_stations(48.8566, 2.3522, 5000) where station_id = tests.station_id()),
           'Un visiteur trouve le poste publié à moins de 5 km');
 
 reset role;
@@ -120,7 +125,7 @@ select tests.login('00000000-0000-0000-0000-0000000000b1');
 insert into public.pro_profiles (profile_id, trades) values ('00000000-0000-0000-0000-0000000000b1', '{barbier}');
 
 select throws_ok(
-  format($$select public.create_booking((select id from public.stations), 'day', %L::timestamptz, 1, true)$$,
+  format($$select public.create_booking(tests.station_id(), 'day', %L::timestamptz, 1, true)$$,
          tests.next_monday()),
   'P0001', 'Vos documents doivent être validés avant de réserver.', 'Réservation refusée sans SIRET ni RC pro');
 
@@ -129,17 +134,17 @@ select tests.approve_all('00000000-0000-0000-0000-0000000000b1', '{identity,sire
 select tests.login('00000000-0000-0000-0000-0000000000b1');
 
 select throws_ok(
-  format($$select public.create_booking((select id from public.stations), 'day', %L::timestamptz, 1, false)$$,
+  format($$select public.create_booking(tests.station_id(), 'day', %L::timestamptz, 1, false)$$,
          tests.next_monday()),
   'P0001', 'L''acceptation du règlement intérieur est obligatoire.', 'Règlement intérieur obligatoire');
 
 select throws_ok(
-  format($$select public.create_booking((select id from public.stations), 'day', %L::timestamptz, 1, true)$$,
+  format($$select public.create_booking(tests.station_id(), 'day', %L::timestamptz, 1, true)$$,
          tests.next_monday() + 5),
   'P0001', 'Créneau indisponible.', 'Impossible de réserver un jour de fermeture');
 
 select lives_ok(
-  format($$select public.create_booking((select id from public.stations), 'day', %L::timestamptz, 1, true)$$,
+  format($$select public.create_booking(tests.station_id(), 'day', %L::timestamptz, 1, true)$$,
          tests.next_monday()),
   'Un pro vérifié réserve une journée');
 
@@ -149,7 +154,7 @@ insert into public.pro_profiles (profile_id, trades) values ('00000000-0000-0000
 select tests.login('00000000-0000-0000-0000-0000000000b2');
 
 select throws_ok(
-  format($$select public.create_booking((select id from public.stations), 'hour', %L::timestamptz, 2, true)$$,
+  format($$select public.create_booking(tests.station_id(), 'hour', %L::timestamptz, 2, true)$$,
          (tests.next_monday()::timestamp + time '10:00') at time zone 'Europe/Paris'),
   'P0001', 'Créneau indisponible.', 'Pas de double réservation sur un créneau qui chevauche');
 
@@ -177,6 +182,11 @@ select is(public.cancellation_refund_cents('moderate', 'pro', now() + interval '
           3000, 'Modérée, pro à 3 jours : 50 % du prix, frais non remboursés');
 select is(public.cancellation_refund_cents('strict', 'host', now() + interval '1 day', now(), 6000, 6480),
           6480, 'Annulation par l''hôte : remboursement intégral, frais compris');
+
+select isnt(
+  public.station_unavailability(tests.station_id(), 'day',
+    public.booking_period('day', now(), 1)),
+  'IN_THE_PAST', 'Une location à la journée reste réservable le jour même');
 
 -- ---------------------------------------------------------------------
 -- Tatouage : documents d'hygiène exigés
