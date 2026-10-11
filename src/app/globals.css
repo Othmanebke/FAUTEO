@@ -1,0 +1,47 @@
+@import "tailwindcss";
+@config "../../tailwind.config.ts";
+
+:root {
+  --background: #ffffff;
+  --foreground: #11141a;
+  --card: #ffffff;
+  --card-foreground: #11141a;
+  --border: #e9ecef;
+  --muted: #6c757d;
+  --accent: #b58e6d;
+}
+
+.dark {
+  --background: #090a0d;
+  --foreground: #f3f4f6;
+  --card: #12151c;
+  --card-foreground: #f9fafb;
+  --border: #222733;
+  --muted: #9aa5b1;
+  --accent: #c7a88b;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not(.light) {
+    --background: #090a0d;
+    --foreground: #f3f4f6;
+    --card: #12151c;
+    --card-foreground: #f9fafb;
+    --border: #222733;
+    --muted: #9aa5b1;
+    --accent: #c7a88b;
+  }
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Subtle luxury logo watermark background */
+.mercedes-luxury-emblem {
+  background-image: radial-gradient(circle at 50% 50%, rgba(181, 142, 109, 0.04) 0%, transparent 70%);
+}
