@@ -30,4 +30,27 @@ Le schéma vit dans [`supabase/migrations/`](supabase/migrations/) et porte tout
 
 Clients Supabase côté Next.js : [`src/lib/supabase/`](src/lib/supabase/) (`client` navigateur, `server` avec session, `admin` service role réservé aux traitements serveur). [`src/proxy.ts`](src/proxy.ts) rafraîchit la session et protège les espaces connectés.
 
+## Parcours disponibles
+
+| Route | Contenu |
+|---|---|
+| `/signup`, `/login` | Inscription (e-mail confirmé), connexion, Google et Apple une fois activés dans Supabase |
+| `/onboarding` | Choix des rôles, profil pro et/ou hôte, dépôt des justificatifs |
+| `/pro`, `/host` | Espaces pro et hôte : état de vérification, réservations, postes |
+| `/account` | Profil, documents, mot de passe, double authentification, export RGPD |
+| `/admin` | Validation des justificatifs (double authentification obligatoire) |
+
+En local, les e-mails (confirmation, mot de passe oublié) arrivent dans Mailpit. Pour créer un administrateur :
+
+```sql
+update public.profiles set is_admin = true
+where id = (select id from auth.users where email = 'vous@exemple.fr');
+```
+
+L'accès à `/admin` demande ensuite d'activer la double authentification dans `/account/securite`.
+
+## Design system
+
+Tokens dans [`src/app/globals.css`](src/app/globals.css) (Tailwind v4, mode sombre inclus), police Manrope, composants dans [`src/components/ui/`](src/components/ui/). Le corail est réservé aux actions principales ; les boutons corail portent un texte encre pour respecter le contraste WCAG AA.
+
 Les choix métier par défaut, à faire valider par le client, sont listés dans [`docs/decisions.md`](docs/decisions.md).

@@ -841,6 +841,11 @@ isOneToOne: false
 "missing_documents":
 { Args: { "role": Database["public"]['Enums']["app_role"],"uid": string }; Returns: (Database["public"]['Enums']["document_type"])[]
                            },
+"my_document_requirements":
+{ Args: Record<PropertyKey, never>; Returns: {
+              "document_id": string,"expires_at": string,"rejection_reason": string,"roles": (Database["public"]['Enums']["app_role"])[],"status": string,"submitted_at": string,"type": Database["public"]['Enums']["document_type"]
+            }[]
+                           },
 "next_invoice_number":
 { Args: { "p_series": string }; Returns: string
                            },

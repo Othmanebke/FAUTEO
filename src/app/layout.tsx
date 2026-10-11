@@ -1,38 +1,34 @@
-import type { Metadata } from "next";
-import { Inter, Plus_Jakarta_Sans } from "next/font/google";
+import type { Metadata, Viewport } from "next";
+import { Manrope } from "next/font/google";
 import "./globals.css";
 
-const sansFont = Plus_Jakarta_Sans({
+const manrope = Manrope({
   subsets: ["latin"],
-  variable: "--font-sans",
+  variable: "--font-manrope",
   display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "FAUTEO | Marketplace de location de postes beauté & bien-être",
+  title: {
+    default: "Fauteo — Louez un poste équipé près de chez vous",
+    template: "%s · Fauteo",
+  },
   description:
-    "La marketplace de référence pour louer un fauteuil ou une cabine équipée. Destinée aux coiffeurs, barbiers, tatoueurs et praticiens bien-être. Cautions sécurisées, contrats instantanés et vérification KYC.",
-  keywords: [
-    "location fauteuil coiffure",
-    "coworking beaute",
-    "cabine tatouage sterile",
-    "poste barbier a louer",
-    "location salon esthetique",
-    "fauteo",
-  ],
-  authors: [{ name: "Fauteo France" }],
+    "Fauteo met en relation salons, barbershops, instituts, ongleries et shops de tatouage avec des professionnels indépendants qui louent un poste équipé à l'heure, à la journée, à la semaine ou au mois.",
+  applicationName: "Fauteo",
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#fff9f5" },
+    { media: "(prefers-color-scheme: dark)", color: "#1b1917" },
+  ],
+};
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="fr" className={`${sansFont.variable} h-full scroll-smooth antialiased`}>
-      <body className="min-h-full flex flex-col font-sans bg-white dark:bg-[#090a0d] text-gray-950 dark:text-gray-100 selection:bg-[#b58e6d]/30 selection:text-black">
-        {children}
-      </body>
+    <html lang="fr" className={`${manrope.variable} h-full scroll-smooth`}>
+      <body className="flex min-h-full flex-col bg-canvas font-sans text-ink antialiased">{children}</body>
     </html>
   );
 }

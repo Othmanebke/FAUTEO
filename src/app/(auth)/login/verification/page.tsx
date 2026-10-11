@@ -1,0 +1,23 @@
+import type { Metadata } from "next";
+import { requireSession, safeNext } from "@/lib/auth/session";
+import { AuthHeading } from "@/components/auth/AuthHeading";
+import { MfaVerifyForm } from "@/components/auth/MfaVerifyForm";
+
+export const metadata: Metadata = { title: "Vérification en deux étapes" };
+
+type SearchParams = Promise<Record<string, string | string[] | undefined>>;
+
+export default async function MfaVerificationPage({ searchParams }: { searchParams: SearchParams }) {
+  await requireSession("/login/verification");
+  const { next } = await searchParams;
+
+  return (
+    <>
+      <AuthHeading
+        title="Vérification en deux étapes"
+        subtitle="Saisissez le code à 6 chiffres affiché dans votre application d'authentification."
+      />
+      <MfaVerifyForm next={safeNext(next, "/")} />
+    </>
+  );
+}

@@ -21,6 +21,9 @@ Points que le cahier des charges v1.0 (8 octobre 2026) ne tranche pas ou qui pos
 | 15 | Rétention du créneau pendant le paiement | 15 minutes. | `platform_settings.payment_hold_minutes` |
 | 16 | Litiges | Ouverture possible jusqu'à 48 h après la fin ; gèle les versements à venir. | `open_dispute` |
 | 17 | Administration | L'accès admin exige la double authentification (TOTP). | `is_admin` |
+| 18 | Contraste du corail | Le blanc sur #FF6B55 n'atteint que 2,8:1 (WCAG AA exige 4,5:1). Les boutons corail gardent leur fond mais portent un texte encre #252A31 (5,2:1) ; les liens corail utilisent la teinte #C2412F (5,1:1). Pour un texte blanc, il faudrait foncer le fond des boutons. | `globals.css` |
+| 19 | Logo | Symbole redessiné en SVG d'après l'image fournie (`docs/brand`). À remplacer par le fichier vectoriel du designer. | `Logo.tsx` |
+| 20 | Mot de passe | 10 caractères minimum, au moins une lettre et un chiffre ; e-mail confirmé obligatoire. | `validation/auth.ts` |
 
 ## À valider par un professionnel
 

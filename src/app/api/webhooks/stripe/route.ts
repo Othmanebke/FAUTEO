@@ -1,51 +1,32 @@
-import { NextRequest, NextResponse } from "next/server";
-import { stripe } from "@/lib/stripe";
+import { NextResponse, type NextRequest } from "next/server";
+import type Stripe from "stripe";
+import { getStripe } from "@/lib/stripe";
 
 /**
- * Webhook handler for Stripe Connect marketplace events:
- * - payment_intent.succeeded (Location payée, calcul de commission)
- * - payment_intent.amount_capturable_updated (Empreinte de caution autorisée)
- * - account.updated (Vérification du compte bancaire de l'hôte)
+ * Webhook Stripe Connect. La signature est toujours vérifiée : aucun
+ * événement non signé n'est accepté, même en développement (utiliser
+ * `stripe listen --forward-to localhost:3000/api/webhooks/stripe`).
+ * Le traitement des événements (paiement autorisé, compte Connect prêt,
+ * transferts) sera branché avec le tunnel de paiement.
  */
 export async function POST(req: NextRequest) {
-  const body = await req.text();
+  const secret = process.env.STRIPE_WEBHOOK_SECRET;
   const signature = req.headers.get("stripe-signature");
-
-  const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
-
-  let event;
-  try {
-    if (webhookSecret && signature) {
-      event = stripe.webhooks.constructEvent(body, signature, webhookSecret);
-    } else {
-      // Mode simulation pour développement
-      event = JSON.parse(body);
-    }
-  } catch (err: any) {
-    console.error(`⚠️ Erreur webhook Stripe : ${err.message}`);
-    return NextResponse.json({ error: `Webhook Error: ${err.message}` }, { status: 400 });
+  if (!secret || !signature) {
+    return NextResponse.json({ error: "Signature manquante" }, { status: 400 });
   }
 
-  // Traitement des événements
+  let event: Stripe.Event;
+  try {
+    event = getStripe().webhooks.constructEvent(await req.text(), signature, secret);
+  } catch {
+    return NextResponse.json({ error: "Signature invalide" }, { status: 400 });
+  }
+
   switch (event.type) {
-    case "payment_intent.succeeded": {
-      const paymentIntent = event.data.object;
-      console.log(`Paiement réussi pour réservation : ${paymentIntent.id}`);
-      // Mettre à jour le statut dans Supabase Database (bookings)
-      break;
-    }
-    case "payment_intent.amount_capturable_updated": {
-      const paymentIntent = event.data.object;
-      console.log(`Caution retenue avec succès (empreinte bancaire) : ${paymentIntent.id}`);
-      break;
-    }
-    case "account.updated": {
-      const account = event.data.object;
-      console.log(`Compte Stripe Connect hôte mis à jour : ${account.id}`);
-      break;
-    }
     default:
-      console.log(`Événement non traité : ${event.type}`);
+      // Événements pris en charge à l'étape « paiement »
+      break;
   }
 
   return NextResponse.json({ received: true });

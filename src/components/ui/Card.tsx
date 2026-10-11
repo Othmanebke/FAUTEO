@@ -2,74 +2,36 @@ import React from "react";
 import { cn } from "@/lib/utils";
 
 export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
-  hoverEffect?: boolean;
+  interactive?: boolean;
+  padded?: boolean;
 }
 
-export function Card({ className, hoverEffect = false, children, ...props }: CardProps) {
+export function Card({ className, interactive = false, padded = true, ...props }: CardProps) {
   return (
     <div
       className={cn(
-        "rounded-2xl border border-gray-100 bg-white p-6 shadow-sm dark:border-gray-800/80 dark:bg-[#11141b]",
-        hoverEffect &&
-          "transition-all duration-300 hover:-translate-y-1 hover:border-gray-300 hover:shadow-lg dark:hover:border-gray-700 dark:hover:shadow-2xl",
+        "rounded-[var(--radius-card)] border border-line bg-surface shadow-card",
+        padded && "p-6",
+        interactive && "transition-[box-shadow,border-color,transform] duration-200 hover:-translate-y-0.5 hover:border-line-strong hover:shadow-raised",
         className
       )}
       {...props}
-    >
-      {children}
-    </div>
+    />
   );
 }
 
-export function CardHeader({
-  className,
-  children,
-  ...props
-}: React.HTMLAttributes<HTMLDivElement>) {
-  return (
-    <div className={cn("mb-4 flex flex-col space-y-1.5", className)} {...props}>
-      {children}
-    </div>
-  );
+export function CardHeader({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
+  return <div className={cn("mb-5 space-y-1", className)} {...props} />;
 }
 
-export function CardTitle({
-  className,
-  children,
-  ...props
-}: React.HTMLAttributes<HTMLHeadingElement>) {
-  return (
-    <h3
-      className={cn(
-        "text-lg font-semibold tracking-tight text-gray-950 dark:text-gray-50",
-        className
-      )}
-      {...props}
-    >
-      {children}
-    </h3>
-  );
+export function CardTitle({ className, ...props }: React.HTMLAttributes<HTMLHeadingElement>) {
+  return <h2 className={cn("text-lg font-bold tracking-tight text-ink", className)} {...props} />;
 }
 
-export function CardDescription({
-  className,
-  children,
-  ...props
-}: React.HTMLAttributes<HTMLParagraphElement>) {
-  return (
-    <p
-      className={cn("text-xs text-gray-500 dark:text-gray-400 leading-relaxed", className)}
-      {...props}
-    >
-      {children}
-    </p>
-  );
+export function CardDescription({ className, ...props }: React.HTMLAttributes<HTMLParagraphElement>) {
+  return <p className={cn("text-sm leading-relaxed text-ink-muted", className)} {...props} />;
 }
 
-export function CardContent({
-  className,
-  children,
-  ...props
-}: React.HTMLAttributes<HTMLDivElement>) {
-  return <div className={cn("pt-0", className)} {...props} />;
+export function CardContent({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
+  return <div className={cn(className)} {...props} />;
 }

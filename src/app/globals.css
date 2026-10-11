@@ -1,47 +1,155 @@
 @import "tailwindcss";
-@config "../../tailwind.config.ts";
+
+/* =====================================================================
+   Fauteo — design tokens
+   Lumineux, chaleureux, aéré. Le corail est réservé aux actions
+   principales, aux états actifs et à la marque.
+
+   Accessibilité (WCAG 2.1 AA, CDC §8) : le blanc sur #FF6B55 n'atteint
+   que 2,8:1. Les boutons corail portent donc un texte encre (5,2:1) et
+   les liens en couleur de marque utilisent --primary-ink (5,1:1).
+   ===================================================================== */
 
 :root {
-  --background: #ffffff;
-  --foreground: #11141a;
-  --card: #ffffff;
-  --card-foreground: #11141a;
-  --border: #e9ecef;
-  --muted: #6c757d;
-  --accent: #b58e6d;
+  --primary: #ff6b55;
+  --primary-hover: #e85d49;
+  --primary-subtle: #ffe3dc;
+  --primary-ink: #c2412f;          /* texte corail lisible sur fond clair */
+  --on-primary: #252a31;
+
+  --canvas: #fff9f5;               /* fond principal */
+  --canvas-alt: #f7f4ef;           /* fond secondaire */
+  --surface: #ffffff;              /* cartes */
+  --surface-soft: #f5e8e1;
+
+  --ink: #252a31;                  /* texte principal */
+  --ink-muted: #697078;            /* texte secondaire */
+
+  --line: #e8e2da;
+  --line-strong: #d9d1c7;
+
+  --success: #347a62;
+  --success-subtle: #e3f1eb;
+  --danger: #b94a45;
+  --danger-subtle: #f8e4e2;
+  --warning: #a96f22;
+  --warning-ink: #85561a;          /* texte d'avertissement lisible */
+  --warning-subtle: #f8ecd9;
+
+  --ring: rgb(255 107 85 / 35%);
+  --shadow-card: 0 4px 20px rgb(37 42 49 / 5%);
+  --shadow-raised: 0 12px 32px rgb(37 42 49 / 8%);
 }
 
-.dark {
-  --background: #090a0d;
-  --foreground: #f3f4f6;
-  --card: #12151c;
-  --card-foreground: #f9fafb;
-  --border: #222733;
-  --muted: #9aa5b1;
-  --accent: #c7a88b;
-}
-
+/* Mode sombre chaud (CDC §12), activable par préférence système ou classe .dark */
 @media (prefers-color-scheme: dark) {
   :root:not(.light) {
-    --background: #090a0d;
-    --foreground: #f3f4f6;
-    --card: #12151c;
-    --card-foreground: #f9fafb;
-    --border: #222733;
-    --muted: #9aa5b1;
-    --accent: #c7a88b;
+    --primary-subtle: #4a2a24;
+    --primary-ink: #ff8a77;
+    --canvas: #1b1917;
+    --canvas-alt: #221f1c;
+    --surface: #262320;
+    --surface-soft: #302a26;
+    --ink: #f4efe9;
+    --ink-muted: #b3aaa1;
+    --line: #3a3430;
+    --line-strong: #4a433e;
+    --success: #6fbf9f;
+    --success-subtle: #1f3129;
+    --danger: #e58a84;
+    --danger-subtle: #3a2321;
+    --warning: #d9a35a;
+    --warning-ink: #e2b26f;
+    --warning-subtle: #3a2e1d;
+    --shadow-card: 0 4px 20px rgb(0 0 0 / 25%);
+    --shadow-raised: 0 12px 32px rgb(0 0 0 / 35%);
   }
 }
 
-body {
-  background-color: var(--background);
-  color: var(--foreground);
-  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+:root.dark {
+  --primary-subtle: #4a2a24;
+  --primary-ink: #ff8a77;
+  --canvas: #1b1917;
+  --canvas-alt: #221f1c;
+  --surface: #262320;
+  --surface-soft: #302a26;
+  --ink: #f4efe9;
+  --ink-muted: #b3aaa1;
+  --line: #3a3430;
+  --line-strong: #4a433e;
+  --success: #6fbf9f;
+  --success-subtle: #1f3129;
+  --danger: #e58a84;
+  --danger-subtle: #3a2321;
+  --warning: #d9a35a;
+  --warning-ink: #e2b26f;
+  --warning-subtle: #3a2e1d;
+  --shadow-card: 0 4px 20px rgb(0 0 0 / 25%);
+  --shadow-raised: 0 12px 32px rgb(0 0 0 / 35%);
 }
 
-/* Subtle luxury logo watermark background */
-.mercedes-luxury-emblem {
-  background-image: radial-gradient(circle at 50% 50%, rgba(181, 142, 109, 0.04) 0%, transparent 70%);
+@theme inline {
+  --font-sans: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
+
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-subtle: var(--primary-subtle);
+  --color-primary-ink: var(--primary-ink);
+  --color-on-primary: var(--on-primary);
+
+  --color-canvas: var(--canvas);
+  --color-canvas-alt: var(--canvas-alt);
+  --color-surface: var(--surface);
+  --color-surface-soft: var(--surface-soft);
+
+  --color-ink: var(--ink);
+  --color-ink-muted: var(--ink-muted);
+
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+
+  --color-success: var(--success);
+  --color-success-subtle: var(--success-subtle);
+  --color-danger: var(--danger);
+  --color-danger-subtle: var(--danger-subtle);
+  --color-warning: var(--warning);
+  --color-warning-ink: var(--warning-ink);
+  --color-warning-subtle: var(--warning-subtle);
+
+  --shadow-card: var(--shadow-card);
+  --shadow-raised: var(--shadow-raised);
+
+  --radius-card: 1.25rem;
+}
+
+@layer base {
+  html {
+    color-scheme: light dark;
+  }
+
+  body {
+    background-color: var(--canvas);
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  ::selection {
+    background-color: var(--primary-subtle);
+    color: var(--ink);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--primary-ink);
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
 }
