@@ -386,7 +386,7 @@ export default function ProDashboardPage() {
             description="Couvrant vos activités de beauté et soins pour l'année en cours."
           />
           <DocumentUpload
-            documentType="hygiene_cert"
+            documentType="hygiene_training"
             title="Formation Hygiène et Salubrité"
             description="Certificat obligatoire de 21 heures pour la pratique du tatouage et perçage."
             isMandatory={false}

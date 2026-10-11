@@ -1,36 +1,33 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Fauteo
 
-## Getting Started
+Place de marché de location de postes (fauteuils, cabines, tables, box) entre **hôtes** (salons, barbershops, instituts, ongleries, shops de tatouage) et **professionnels indépendants** de la beauté.
 
-First, run the development server:
+Stack : Next.js 16 (App Router) · Tailwind CSS · Supabase (PostgreSQL + PostGIS, Auth, Storage) · Stripe Connect.
+
+## Démarrage local
+
+Prérequis : Node 20+, Docker Desktop lancé.
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run db:start      # Supabase local : applique les migrations, affiche URL et clés
+cp .env.example .env.local   # puis renseigner les valeurs affichées
+npm run dev           # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Studio Supabase : http://127.0.0.1:54323 · E-mails de test (Mailpit) : http://127.0.0.1:54324
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Base de données
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Le schéma vit dans [`supabase/migrations/`](supabase/migrations/) et porte toute la logique métier (prix, disponibilités, KYC bloquant, annulations, versements, avis), pour être partagé par le web et la future application mobile. Les écritures sensibles passent par des fonctions SQL ; les règles RLS protègent chaque table.
 
-## Learn More
+| Commande | Rôle |
+|---|---|
+| `npm run db:reset` | Recrée la base locale et rejoue les migrations |
+| `npm run db:test` | Tests pgTAP des règles métier (`supabase/tests/`) |
+| `npm run db:lint` | Analyse statique des fonctions SQL |
+| `npm run db:types` | Régénère `src/types/database.types.ts` après une migration |
 
-To learn more about Next.js, take a look at the following resources:
+Clients Supabase côté Next.js : [`src/lib/supabase/`](src/lib/supabase/) (`client` navigateur, `server` avec session, `admin` service role réservé aux traitements serveur). [`src/proxy.ts`](src/proxy.ts) rafraîchit la session et protège les espaces connectés.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Les choix métier par défaut, à faire valider par le client, sont listés dans [`docs/decisions.md`](docs/decisions.md).

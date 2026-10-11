@@ -7,7 +7,7 @@ export interface KYCRequirementsState {
   siret: boolean;
   identity: boolean;
   rc_pro: boolean;
-  hygiene_cert: boolean; // Obligatoire si catégorie tatouage
+  hygiene_training: boolean; // Obligatoire si catégorie tatouage
 }
 
 export function useKYC(isTattooArtist: boolean = false) {
@@ -15,7 +15,7 @@ export function useKYC(isTattooArtist: boolean = false) {
     siret: false,
     identity: false,
     rc_pro: false,
-    hygiene_cert: false,
+    hygiene_training: false,
   });
 
   const markDocumentUploaded = (type: DocumentType) => {
@@ -30,13 +30,13 @@ export function useKYC(isTattooArtist: boolean = false) {
     documentsState.siret &&
     documentsState.identity &&
     documentsState.rc_pro &&
-    (!isTattooArtist || documentsState.hygiene_cert);
+    (!isTattooArtist || documentsState.hygiene_training);
 
   const pendingCount = [
     !documentsState.siret,
     !documentsState.identity,
     !documentsState.rc_pro,
-    isTattooArtist && !documentsState.hygiene_cert,
+    isTattooArtist && !documentsState.hygiene_training,
   ].filter(Boolean).length;
 
   return {

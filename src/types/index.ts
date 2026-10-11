@@ -1,12 +1,50 @@
-import { Database, UserRole, KYCStatus, DocumentType, BookingStatus } from "./database.types";
+import type { Database, Enums, Tables } from "./database.types";
 
-export type { UserRole, KYCStatus, DocumentType, BookingStatus };
-export type Profile = Database["public"]["Tables"]["profiles"]["Row"];
-export type Listing = Database["public"]["Tables"]["listings"]["Row"];
-export type Booking = Database["public"]["Tables"]["bookings"]["Row"];
-export type KYCDocument = Database["public"]["Tables"]["kyc_documents"]["Row"];
-export type Service = Database["public"]["Tables"]["services"]["Row"];
-export type Appointment = Database["public"]["Tables"]["appointments"]["Row"];
+export type { Database };
+
+// ---------------------------------------------------------------------
+// Types dérivés du schéma Supabase (source de vérité : supabase/migrations).
+// Régénérer après chaque migration : `npm run db:types`.
+// ---------------------------------------------------------------------
+export type Trade = Enums<"trade">;
+export type StationType = Enums<"station_type">;
+export type AppRole = Enums<"app_role">;
+export type DocumentType = Enums<"document_type">;
+export type DocumentStatus = Enums<"document_status">;
+export type BookingMode = Enums<"booking_mode">;
+export type BookingStatus = Enums<"booking_status">;
+export type CancellationPolicy = Enums<"cancellation_policy">;
+export type PriceUnit = Enums<"price_unit">;
+export type StationStatus = Enums<"station_status">;
+
+export type Profile = Tables<"profiles">;
+export type ProProfile = Tables<"pro_profiles">;
+export type HostProfile = Tables<"host_profiles">;
+export type KycDocument = Tables<"documents">;
+export type Venue = Tables<"venues">;
+export type Station = Tables<"stations">;
+export type AvailabilityRule = Tables<"availability_rules">;
+export type Booking = Tables<"bookings">;
+export type Payout = Tables<"payouts">;
+export type Invoice = Tables<"invoices">;
+export type Conversation = Tables<"conversations">;
+export type Message = Tables<"messages">;
+export type Review = Tables<"reviews">;
+export type Notification = Tables<"notifications">;
+export type PlatformSettings = Tables<"platform_settings">;
+
+export type BookingQuote = Database["public"]["CompositeTypes"]["booking_quote"];
+export type StationSearchResult = Database["public"]["Functions"]["search_stations"]["Returns"][number];
+
+// ---------------------------------------------------------------------
+// Types d'interface encore utilisés par les écrans maquettés.
+// À supprimer quand les écrans seront branchés sur la base (étape 2 :
+// retrait du parcours B2C hors périmètre du CDC).
+// ---------------------------------------------------------------------
+/** @deprecated Utiliser AppRole (le rôle admin n'est pas un rôle actif). */
+export type UserRole = AppRole | "admin";
+/** @deprecated Utiliser DocumentStatus et is_verified(). */
+export type KYCStatus = "pending" | "approved" | "rejected" | "missing_documents";
 
 export type SearchTarget = "chair" | "pro";
 
@@ -19,24 +57,6 @@ export type BeautyCategory =
   | "tatouage"
   | "massage"
   | "maquillage";
-
-export interface CategoryInfo {
-  id: BeautyCategory;
-  name: string;
-  description: string;
-  iconName: string;
-}
-
-export interface SearchFilters {
-  target: SearchTarget;
-  query?: string;
-  city?: string;
-  category?: BeautyCategory;
-  serviceQuery?: string;
-  maxPrice?: number;
-  date?: string;
-  verifiedOnly?: boolean;
-}
 
 export interface ProfessionalWithServices {
   id: string;
@@ -56,13 +76,4 @@ export interface ProfessionalWithServices {
     price: number;
     duration: string;
   }[];
-}
-
-export interface VerificationRequirement {
-  type: DocumentType;
-  label: string;
-  description: string;
-  mandatoryFor: string[];
-  isUploaded?: boolean;
-  status?: KYCStatus;
 }
