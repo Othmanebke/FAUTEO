@@ -428,14 +428,14 @@ export default function HomePage() {
                 </div>
               </div>
               <div className="mt-6 pt-2">
-                <button
-                  onClick={() => setActiveTarget("pro")}
+                <Button
+                  variant="gold"
+                  size="sm"
                   className="w-full"
+                  onClick={() => setActiveTarget("pro")}
                 >
-                  <Button variant="gold" size="sm" className="w-full">
-                    Trouver un coiffeur ou un pro
-                  </Button>
-                </button>
+                  Trouver un coiffeur ou un pro
+                </Button>
               </div>
             </Card>
           </div>
