@@ -3,6 +3,7 @@ import { ArrowRight, BadgeCheck, ShieldAlert } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { DOCUMENT_LABELS } from "@/lib/labels";
 import { loadDocumentRequirements } from "@/components/documents/DocumentsChecklist";
+import { DocumentsValidatedBadge } from "@/components/brand/TrustBadges";
 import { buttonClasses } from "@/components/ui/Button";
 import type { AppRole } from "@/types";
 
@@ -16,7 +17,7 @@ export async function VerificationCard({ userId, role }: { userId: string; role:
 
   if (verified) {
     return (
-      <div className="flex items-center gap-4 rounded-[24px] border border-success/25 bg-success-subtle p-5 sm:p-6">
+      <div className="flex flex-wrap items-center gap-4 rounded-[24px] border border-line bg-surface p-5 sm:p-6">
         <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-success text-white">
           <BadgeCheck className="h-6 w-6" aria-hidden />
         </span>
@@ -26,6 +27,7 @@ export async function VerificationCard({ userId, role }: { userId: string; role:
             {role === "pro" ? "Vous pouvez réserver un poste." : "Vos postes peuvent être mis en ligne."}
           </p>
         </div>
+        <DocumentsValidatedBadge className="sm:ml-auto" />
       </div>
     );
   }

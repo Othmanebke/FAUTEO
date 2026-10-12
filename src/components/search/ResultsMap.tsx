@@ -16,12 +16,24 @@ export interface MapPoint {
   title: string;
 }
 
-/** Repère « prix » façon pastille, mis en avant quand l'annonce est survolée. */
+/** Symbole Fauteo en SVG brut (coral sur fond encre, inverse sur fond corail). */
+function markSvg(active: boolean) {
+  const arch = active ? "#FFFFFF" : "#FF6B55";
+  const stroke = active ? "#FF6B55" : "#FFFFFF";
+  return `<svg viewBox="0 0 48 56" width="17" height="20" aria-hidden="true" style="flex-shrink:0"><path d="M4 51V24a20 20 0 0 1 40 0v27a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3Z" fill="${arch}"/><g fill="none" stroke="${stroke}" stroke-width="4.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 44V23.5a5 5 0 0 1 5-5h9"/><path d="M17 33h14v11"/></g></svg>`;
+}
+
+/**
+ * Marqueur de carte (charte, section 07) : pilule encre, symbole + prix,
+ * pointe en losange. Sélectionné : fond corail, texte encre (contraste AA).
+ */
 function priceIcon(price: number, active: boolean) {
+  const bg = active ? "#FF6B55" : "#252A31";
+  const fg = active ? "#252A31" : "#FFFFFF";
   return L.divIcon({
     className: "",
     iconSize: undefined,
-    html: `<span style="display:inline-block;transform:translate(-50%,-50%);white-space:nowrap;border-radius:9999px;padding:6px 10px;font:600 13px var(--font-manrope),sans-serif;box-shadow:0 4px 14px rgb(37 42 49/18%);border:1px solid ${active ? "#252A31" : "#E8E2DA"};background:${active ? "#252A31" : "#fff"};color:${active ? "#FFF9F5" : "#252A31"}">${formatCents(price)}</span>`,
+    html: `<span style="display:inline-flex;flex-direction:column;align-items:center;transform:translate(-50%,-100%)"><span style="display:inline-flex;align-items:center;gap:6px;white-space:nowrap;border-radius:9999px;padding:6px 12px 6px 6px;background:${bg};color:${fg};font:700 13px var(--font-manrope),sans-serif;box-shadow:0 6px 14px rgb(37 42 49/22%)">${markSvg(active)}${formatCents(price)}</span><span style="width:10px;height:10px;background:${bg};transform:rotate(45deg);margin-top:-6px"></span></span>`,
   });
 }
 

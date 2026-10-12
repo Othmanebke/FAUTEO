@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { BadgeCheck } from "lucide-react";
+import { VerifiedPlaceBadge } from "@/components/brand/TrustBadges";
 import { SaveButton } from "@/components/favorites/SaveButton";
 import { PRICE_UNIT_LABELS } from "@/lib/labels";
 import { cn, formatCents } from "@/lib/utils";
@@ -44,9 +44,7 @@ export function StationFeatureCard({ station, className }: { station: FeatureSta
         <span className="pointer-events-none absolute right-[18px] top-[18px] rounded-full bg-white/94 px-2.5 py-1.5 text-[13px] font-bold text-ink">Nouveau</span>
       )}
       {station.verified && (
-        <span className="pointer-events-none absolute left-[18px] top-[18px] flex items-center gap-[5px] rounded-full bg-white/94 px-2.5 py-1.5 text-xs font-bold text-success">
-          <BadgeCheck className="h-3.5 w-3.5" aria-hidden /> Vérifié
-        </span>
+        <VerifiedPlaceBadge short className="pointer-events-none absolute left-[18px] top-[18px]" />
       )}
 
       <div className="absolute inset-x-[22px] bottom-[22px] text-white">

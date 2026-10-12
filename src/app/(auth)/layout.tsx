@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import Link from "next/link";
 import { ArrowLeft, BadgeCheck, FileSignature, ShieldCheck } from "lucide-react";
-import { Logo } from "@/components/shared/Logo";
+import { Logo } from "@/components/brand/Logo";
 import { AuthTabs } from "@/components/auth/AuthTabs";
 import { Skeleton } from "@/components/ui/Skeleton";
 
@@ -24,8 +24,8 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
         <div aria-hidden className="absolute inset-0 bg-[radial-gradient(120%_80%_at_20%_10%,#ffb39f_0%,#ff8a72_30%,#c2412f_62%,#252a31_100%)]" />
         <div aria-hidden className="absolute inset-0 bg-[linear-gradient(180deg,rgb(37_42_49/30%)_0%,rgb(37_42_49/10%)_35%,rgb(37_42_49/85%)_100%)]" />
 
-        <Link href="/" aria-label="Fauteo, accueil" className="relative self-start rounded-full bg-white/92 py-2 pl-2.5 pr-4">
-          <Logo size="xs" withTagline />
+        <Link href="/" aria-label="Fauteo" className="relative self-start rounded-full bg-white py-2.5 pl-3 pr-4">
+          <Logo size={26} />
         </Link>
 
         <div className="relative flex flex-col gap-6">
@@ -55,7 +55,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
             <ArrowLeft className="h-4 w-4" aria-hidden />
             <span className="hidden sm:inline">Retour à l&apos;accueil</span>
             <span className="sm:hidden">
-              <Logo size="xs" />
+              <Logo size={26} />
             </span>
           </Link>
           <Suspense fallback={<div className="h-11 w-64 rounded-full bg-canvas-alt" />}>

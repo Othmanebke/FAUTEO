@@ -2,7 +2,7 @@ import { Suspense } from "react";
 import Link from "next/link";
 import { getSession } from "@/lib/auth/session";
 import { cn } from "@/lib/utils";
-import { Logo } from "./Logo";
+import { Logo } from "@/components/brand/Logo";
 import { NavbarClient, type NavbarVariant, type NavUser } from "./NavbarClient";
 
 /** Partie de l'en-tête qui dépend de la session, rendue à la requête. */
@@ -39,8 +39,9 @@ export function Navbar({ variant = "bar", hideOnMobile = false }: { variant?: Na
             : "relative mx-auto h-16 max-w-[1280px] gap-6 px-4 sm:px-8 lg:h-[76px]"
         )}
       >
-        <Link href="/" aria-label="Fauteo, accueil" className="shrink-0 rounded-lg">
-          <Logo size={floating ? "sm" : "md"} />
+        <Link href="/" aria-label="Fauteo" className="shrink-0 rounded-lg">
+          <Logo size={28} textSize={21} className="hidden lg:inline-flex" />
+          <Logo size={26} className="lg:hidden" />
         </Link>
         <Suspense fallback={<div className="h-10 w-44" aria-hidden />}>
           <NavbarSession variant={variant} />

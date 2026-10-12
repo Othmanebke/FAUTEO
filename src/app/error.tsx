@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import Link from "next/link";
 import { RefreshCw } from "lucide-react";
 import { Button, buttonClasses } from "@/components/ui/Button";
-import { Logo } from "@/components/shared/Logo";
+import { Logo } from "@/components/brand/Logo";
 
 /** Erreur inattendue : message sobre, nouvel essai possible sans recharger la page. */
 export default function Error({ error, retry }: { error: Error & { digest?: string }; retry: () => void }) {
@@ -14,7 +14,7 @@ export default function Error({ error, retry }: { error: Error & { digest?: stri
 
   return (
     <main className="mx-auto flex min-h-dvh max-w-md flex-col items-center justify-center gap-6 px-4 text-center">
-      <Logo />
+      <Logo size={28} />
       <div className="space-y-2">
         <h1 className="text-2xl font-bold tracking-tight text-ink">Un souci de notre côté</h1>
         <p className="text-[15px] leading-relaxed text-ink-muted">

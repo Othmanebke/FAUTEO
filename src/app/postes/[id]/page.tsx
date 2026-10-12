@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { VerifiedPlaceBadge } from "@/components/brand/TrustBadges";
 import { Armchair, ArrowLeft, BadgeCheck, Brush, CalendarClock, Clock, Hand, MapPin, PenTool, Ruler, Scissors, ShieldCheck, Zap } from "lucide-react";
 import { Navbar } from "@/components/shared/Navbar";
 import { Footer } from "@/components/shared/Footer";
@@ -96,9 +97,7 @@ async function StationContent({ params, searchParams }: { params: Params; search
               <MapPin className="h-4 w-4" aria-hidden /> {venue.name} · {venue.postal_code} {venue.city}
             </span>
             {host.verified && (
-              <span className="flex items-center gap-1 rounded-full bg-success-subtle px-2.5 py-[5px] text-xs font-bold text-success">
-                <BadgeCheck className="h-3.5 w-3.5" aria-hidden /> Hôte vérifié
-              </span>
+              <VerifiedPlaceBadge />
             )}
             {station.booking_mode === "instant" && (
               <span className="flex items-center gap-1 rounded-full bg-primary-subtle px-2.5 py-[5px] text-xs font-bold text-primary-ink">

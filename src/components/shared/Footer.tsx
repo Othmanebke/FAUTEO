@@ -2,7 +2,7 @@ import Link from "next/link";
 import { cacheLife } from "next/cache";
 import { Lock, ShieldCheck } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Logo } from "./Logo";
+import { Logo } from "@/components/brand/Logo";
 
 const COLUMNS = [
   {
@@ -69,7 +69,7 @@ export function Footer({ rounded = false, compact = false }: { rounded?: boolean
       <div className="mx-auto max-w-[1280px] px-4 pb-8 pt-14 sm:px-8">
         <div className="grid gap-10 md:grid-cols-[1.4fr_repeat(3,1fr)]">
           <div className="max-w-[300px]">
-            <Logo withTagline />
+            <Logo size={32} withTagline />
             <p className="mt-4 text-sm leading-[1.6] text-ink-muted">
               Des postes équipés dans des lieux de confiance, pour les indépendants de la beauté et du bien-être.
             </p>

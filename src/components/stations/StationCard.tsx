@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { BadgeCheck, MapPin, Star, Zap } from "lucide-react";
+import { MapPin, Star, Zap } from "lucide-react";
+import { VerifiedPlaceBadge } from "@/components/brand/TrustBadges";
 import { PriceTag } from "@/components/ui/PriceTag";
 import { SaveButton } from "@/components/favorites/SaveButton";
 import { STATION_TYPE_LABELS } from "@/lib/labels";
@@ -44,9 +45,7 @@ export function StationCard({
         <StationImage src={photoUrl} alt={station.title} type={station.type} className="aspect-[4/3]" />
         <div className="absolute left-3 top-3 flex flex-wrap gap-1.5">
           {station.host_verified && (
-            <span className="inline-flex items-center gap-1 rounded-full bg-white/94 px-2.5 py-1.5 text-xs font-bold text-success">
-              <BadgeCheck className="h-3.5 w-3.5" aria-hidden /> Vérifié
-            </span>
+            <VerifiedPlaceBadge short />
           )}
           {station.booking_mode === "instant" && (
             <span className="inline-flex items-center gap-1 rounded-full bg-white/94 px-2.5 py-1.5 text-xs font-bold text-ink">
