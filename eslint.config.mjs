@@ -14,7 +14,6 @@ const eslintConfig = defineConfig([
     "next-env.d.ts",
     // Maquettes de design (HTML et images de référence, pas du code applicatif)
     "design/**",
-    "design ux2/**",
   ]),
 ]);
 
