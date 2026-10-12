@@ -247,6 +247,32 @@ isOneToOne: false
       referencedColumns: ["id"]
     }
                   ]
+                },"favorites": {
+                  Row: {
+                    "created_at": string,"profile_id": string,"station_id": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "created_at"?: string,"profile_id": string,"station_id": string
+                  }
+                  Update: {
+                    "created_at"?: string,"profile_id"?: string,"station_id"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "favorites_profile_id_fkey"
+      columns: ["profile_id"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "favorites_station_id_fkey"
+      columns: ["station_id"]
+isOneToOne: false
+      referencedRelation: "stations"
+      referencedColumns: ["id"]
+    }
+                  ]
                 },"host_profiles": {
                   Row: {
                     "billing_address": string | null,"billing_city": string | null,"billing_postal_code": string | null,"birth_date": string | null,"cancellation_count": number,"created_at": string,"legal_name": string,"profile_id": string,"siret": string,"stripe_account_id": string | null,"stripe_ready": boolean,"tax_id": string | null,"updated_at": string,"vat_number": string | null,"vat_regime": Database["public"]['Enums']["vat_regime"]

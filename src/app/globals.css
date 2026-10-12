@@ -15,6 +15,7 @@
   --primary-hover: #e85d49;
   --primary-subtle: #ffe3dc;
   --primary-ink: #c2412f;          /* texte corail lisible sur fond clair */
+  --primary-soft-ink: #ff8a77;     /* prix sur photo sombre */
   --on-primary: #252a31;
 
   --canvas: #fff9f5;               /* fond principal */
@@ -95,6 +96,7 @@
   --color-primary-hover: var(--primary-hover);
   --color-primary-subtle: var(--primary-subtle);
   --color-primary-ink: var(--primary-ink);
+  --color-primary-soft-ink: var(--primary-soft-ink);
   --color-on-primary: var(--on-primary);
 
   --color-canvas: var(--canvas);

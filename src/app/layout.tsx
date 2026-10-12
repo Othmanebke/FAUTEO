@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Manrope } from "next/font/google";
+import { FavoritesProvider } from "@/components/favorites/FavoritesProvider";
 import "./globals.css";
 
 const manrope = Manrope({
@@ -28,7 +29,9 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="fr" className={`${manrope.variable} h-full scroll-smooth`}>
-      <body className="flex min-h-full flex-col bg-canvas font-sans text-ink antialiased">{children}</body>
+      <body className="flex min-h-full flex-col bg-canvas font-sans text-ink antialiased">
+        <FavoritesProvider>{children}</FavoritesProvider>
+      </body>
     </html>
   );
 }

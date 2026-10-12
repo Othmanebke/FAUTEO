@@ -2,7 +2,7 @@ import React from "react";
 import { Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-export type ButtonVariant = "primary" | "secondary" | "outline" | "ghost" | "danger";
+export type ButtonVariant = "primary" | "secondary" | "soft" | "outline" | "ghost" | "danger";
 export type ButtonSize = "sm" | "md" | "lg";
 
 const base =
@@ -16,6 +16,8 @@ const variants: Record<ButtonVariant, string> = {
     "bg-primary text-on-primary hover:bg-primary-hover shadow-[0_1px_2px_rgb(37_42_49/8%)] " +
     "disabled:not-aria-busy:bg-canvas-alt disabled:not-aria-busy:text-ink-muted disabled:not-aria-busy:shadow-none",
   secondary: "bg-surface text-ink border border-line hover:border-line-strong hover:bg-canvas-alt disabled:text-ink-muted",
+  // Bouton blanc sans bordure, posé sur un fond coloré (hero)
+  soft: "bg-surface text-ink shadow-card hover:bg-canvas-alt disabled:text-ink-muted",
   outline: "border border-ink/80 text-ink hover:bg-ink hover:text-canvas disabled:opacity-50",
   ghost: "text-ink hover:bg-canvas-alt disabled:opacity-50",
   danger: "bg-danger text-white hover:brightness-95 disabled:opacity-50",
@@ -24,7 +26,7 @@ const variants: Record<ButtonVariant, string> = {
 const sizes: Record<ButtonSize, string> = {
   sm: "h-9 px-4 text-sm",
   md: "h-11 px-5 text-[15px]",
-  lg: "h-13 px-7 text-base",
+  lg: "h-[54px] px-[26px] text-base",
 };
 
 /** Classes d'un bouton, réutilisables sur un <Link> (évite d'imbriquer un bouton dans un lien). */
