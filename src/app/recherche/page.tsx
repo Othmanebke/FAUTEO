@@ -78,16 +78,16 @@ export default function SearchPage({ searchParams }: { searchParams: SearchParam
   return (
     <>
       <Navbar />
-      <main className="mx-auto w-full max-w-7xl flex-1 px-4 pb-24 pt-8 sm:px-6 lg:px-8">
-        <h1 className="mb-5 text-3xl font-bold tracking-tight text-ink">Trouver un poste</h1>
-        <Suspense fallback={<Skeleton className="h-28 rounded-[1.75rem]" />}>
+      <main className="mx-auto w-full max-w-[1280px] flex-1 px-4 pb-24 pt-8 sm:px-8">
+        <h1 className="mb-6 text-[32px] font-bold tracking-[-0.02em] text-ink sm:text-[40px]">Trouver un poste</h1>
+        <Suspense fallback={<Skeleton className="h-[136px] rounded-[28px]" />}>
           <Form searchParams={searchParams} />
         </Suspense>
         <Suspense
           fallback={
             <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
               {Array.from({ length: 6 }, (_, i) => (
-                <Skeleton key={i} className="h-80" />
+                <Skeleton key={i} className="h-80 rounded-[24px]" />
               ))}
             </div>
           }

@@ -1,7 +1,8 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { Search, SlidersHorizontal } from "lucide-react";
+import Link from "next/link";
+import { BadgeCheck, ChevronDown, Search, SlidersHorizontal, Star, Wallet } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { PRICE_UNIT_LABELS, TRADE_LABELS } from "@/lib/labels";
 import { cn } from "@/lib/utils";
@@ -24,7 +25,9 @@ export interface SearchFormValues {
 }
 
 const field =
-  "h-12 w-full rounded-full border border-line bg-surface px-4 text-[15px] text-ink focus:border-primary focus:outline-none focus:ring-4 focus:ring-[var(--ring)]";
+  "h-[52px] w-full rounded-full border border-line bg-surface px-[18px] text-[15px] text-ink transition-[border-color,box-shadow] hover:border-line-strong focus:border-primary focus:outline-none focus:ring-4 focus:ring-[var(--ring)]";
+
+const selectField = cn(field, "appearance-none pr-10");
 
 const QUANTITY_LABEL: Record<PriceUnit, string> = {
   hour: "heure(s)",
@@ -34,52 +37,96 @@ const QUANTITY_LABEL: Record<PriceUnit, string> = {
   month: "mois",
 };
 
+/** URL de recherche reprenant les filtres actuels, avec des valeurs modifiées. */
+function searchHref(values: SearchFormValues, overrides: Record<string, string | null>) {
+  const q = new URLSearchParams();
+  if (values.metier) q.set("metier", values.metier);
+  if (values.place) {
+    q.set("lieu", values.place.label);
+    q.set("lat", values.place.lat.toFixed(5));
+    q.set("lng", values.place.lng.toFixed(5));
+  }
+  if (values.duree) q.set("duree", values.duree);
+  if (values.date) q.set("date", values.date);
+  if (values.duree === "hour" || values.duree === "half_day") q.set("heure", values.heure);
+  if (values.nb > 1) q.set("nb", String(values.nb));
+  if (values.budget) q.set("budget", String(values.budget));
+  if (values.note) q.set("note", String(values.note));
+  if (values.verifie) q.set("verifie", "1");
+  if (values.rayon !== 10) q.set("rayon", String(values.rayon));
+  for (const e of values.equipements) q.append("equipements", e);
+  if (values.tri !== "distance") q.set("tri", values.tri);
+  for (const [k, v] of Object.entries(overrides)) {
+    if (v === null) q.delete(k);
+    else q.set(k, v);
+  }
+  return `/recherche${q.size ? `?${q}` : ""}`;
+}
+
+function Chevron() {
+  return <ChevronDown className="pointer-events-none absolute right-4 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-muted" aria-hidden />;
+}
+
 /**
  * Formulaire de recherche (GET /recherche) : l'URL porte tous les filtres,
  * la page est partageable et le bouton retour du navigateur fonctionne.
  */
-export function SearchForm({
-  values,
-  amenities,
-}: {
-  values: SearchFormValues;
-  amenities: { code: string; label: string }[];
-}) {
+export function SearchForm({ values, amenities }: { values: SearchFormValues; amenities: { code: string; label: string }[] }) {
   const formRef = useRef<HTMLFormElement>(null);
   const [unit, setUnit] = useState<PriceUnit | "">(values.duree ?? "");
-  const activeFilters =
-    (values.budget ? 1 : 0) + (values.note ? 1 : 0) + (values.verifie ? 1 : 0) + values.equipements.length + (values.rayon !== 10 ? 1 : 0);
+  const activeFilters = (values.budget ? 1 : 0) + (values.note ? 1 : 0) + (values.verifie ? 1 : 0) + values.equipements.length + (values.rayon !== 10 ? 1 : 0);
   const [showFilters, setShowFilters] = useState(false);
 
+  // Filtres rapides : bascules en un clic (liens vers l'URL modifiée)
+  const quick = [
+    { label: "Hôte vérifié", icon: BadgeCheck, on: values.verifie, href: searchHref(values, { verifie: values.verifie ? null : "1" }) },
+    { label: "Note 4,5 et plus", icon: Star, on: values.note === 4.5, href: searchHref(values, { note: values.note === 4.5 ? null : "4.5" }) },
+    { label: "50 € maximum", icon: Wallet, on: values.budget === 50, href: searchHref(values, { budget: values.budget === 50 ? null : "50" }) },
+  ];
+
   return (
-    <form ref={formRef} action="/recherche" method="get" className="space-y-3" role="search" aria-label="Rechercher un poste">
-      <div className="grid grid-cols-2 gap-2 rounded-[1.75rem] border border-line bg-surface p-2.5 shadow-card md:grid-cols-[1fr_1.4fr_1fr_1fr_auto] md:gap-3 md:p-3">
-        <label className="sr-only" htmlFor="metier">Métier</label>
-        <select id="metier" name="metier" defaultValue={values.metier ?? ""} className={cn(field, "appearance-none")}>
-          <option value="">Tous les métiers</option>
-          {(Object.entries(TRADE_LABELS) as [Trade, string][]).map(([v, label]) => (
-            <option key={v} value={v}>
-              {label}
-            </option>
-          ))}
-        </select>
+    <form ref={formRef} action="/recherche" method="get" className="space-y-3.5" role="search" aria-label="Rechercher un poste">
+      <div className="grid grid-cols-2 gap-2 rounded-[28px] border border-line bg-surface p-2.5 shadow-card md:grid-cols-[1fr_1.4fr_1fr_1fr_auto] md:gap-2.5 md:p-3">
+        <div className="relative">
+          <label className="sr-only" htmlFor="metier">
+            Métier
+          </label>
+          <select id="metier" name="metier" defaultValue={values.metier ?? ""} className={selectField}>
+            <option value="">Tous les métiers</option>
+            {(Object.entries(TRADE_LABELS) as [Trade, string][]).map(([v, label]) => (
+              <option key={v} value={v}>
+                {label}
+              </option>
+            ))}
+          </select>
+          <Chevron />
+        </div>
 
-        <PlaceInput defaultPlace={values.place} className="col-span-2 row-start-1 md:col-span-1 md:row-start-auto" />
+        <PlaceInput defaultPlace={values.place} className="col-span-2 row-start-1 md:col-span-1 md:row-start-auto" inputClassName="h-[52px]" />
 
-        <label className="sr-only" htmlFor="duree">Durée de location</label>
-        <select id="duree" name="duree" value={unit} onChange={(e) => setUnit(e.target.value as PriceUnit | "")} className={cn(field, "appearance-none")}>
-          <option value="">Toutes durées</option>
-          {(Object.entries(PRICE_UNIT_LABELS) as [PriceUnit, { long: string }][]).map(([v, l]) => (
-            <option key={v} value={v}>
-              {l.long}
-            </option>
-          ))}
-        </select>
+        <div className="relative">
+          <label className="sr-only" htmlFor="duree">
+            Durée de location
+          </label>
+          <select id="duree" name="duree" value={unit} onChange={(e) => setUnit(e.target.value as PriceUnit | "")} className={selectField}>
+            <option value="">Toutes durées</option>
+            {(Object.entries(PRICE_UNIT_LABELS) as [PriceUnit, { long: string }][]).map(([v, l]) => (
+              <option key={v} value={v}>
+                {l.long}
+              </option>
+            ))}
+          </select>
+          <Chevron />
+        </div>
 
-        <label className="sr-only" htmlFor="date">Date de début</label>
-        <input id="date" name="date" type="date" defaultValue={values.date} className={field} aria-describedby="date-aide" />
+        <div>
+          <label className="sr-only" htmlFor="date">
+            Date de début
+          </label>
+          <input id="date" name="date" type="date" defaultValue={values.date} className={field} aria-describedby="date-aide" />
+        </div>
 
-        <Button type="submit" size="lg" className="h-12 px-4">
+        <Button type="submit" size="lg" className="h-[52px] px-6">
           <Search className="h-4 w-4" aria-hidden />
           <span className="md:sr-only lg:not-sr-only">Rechercher</span>
         </Button>
@@ -88,19 +135,24 @@ export function SearchForm({
         Avec une durée et une date, seuls les postes disponibles sont affichés.
       </p>
 
-      <div className="flex flex-wrap items-center gap-2">
+      {/* Mobile : rangée défilante ; desktop : retour à la ligne */}
+      <div className="-mx-4 flex items-center gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none] sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0 sm:pb-0 [&>*]:shrink-0">
         {unit && (
-          <div className="flex items-center gap-2 rounded-full border border-line bg-surface px-3 py-1.5 text-sm">
+          <div className="flex h-10 items-center gap-2 rounded-full border border-line bg-surface px-4 text-sm">
             {(unit === "hour" || unit === "half_day") && (
               <>
-                <label htmlFor="heure" className="text-ink-muted">À</label>
+                <label htmlFor="heure" className="text-ink-muted">
+                  À
+                </label>
                 <input id="heure" name="heure" type="time" step={1800} defaultValue={values.heure} className="bg-transparent font-semibold text-ink focus:outline-none" />
               </>
             )}
             {unit !== "half_day" && (
               <>
-                <label htmlFor="nb" className="text-ink-muted">Pour</label>
-                <input id="nb" name="nb" type="number" min={1} max={52} defaultValue={values.nb} className="w-12 bg-transparent font-semibold text-ink focus:outline-none" />
+                <label htmlFor="nb" className="text-ink-muted">
+                  Pour
+                </label>
+                <input id="nb" name="nb" type="number" min={1} max={52} defaultValue={values.nb} className="w-10 bg-transparent font-semibold text-ink focus:outline-none" />
                 <span className="text-ink-muted">{QUANTITY_LABEL[unit]}</span>
               </>
             )}
@@ -113,68 +165,96 @@ export function SearchForm({
           aria-expanded={showFilters}
           aria-controls="filtres-avances"
           className={cn(
-            "inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-semibold transition-colors",
-            activeFilters ? "border-primary bg-primary-subtle text-primary-ink" : "border-line bg-surface text-ink hover:border-line-strong"
+            "inline-flex h-10 items-center gap-2 rounded-full border px-4 text-sm font-semibold transition-colors",
+            activeFilters || showFilters ? "border-primary bg-primary-subtle text-primary-ink" : "border-line bg-surface text-ink hover:border-line-strong"
           )}
         >
           <SlidersHorizontal className="h-4 w-4" aria-hidden />
           Filtres{activeFilters ? ` · ${activeFilters}` : ""}
         </button>
 
-        <div className="ml-auto flex items-center gap-2 text-sm">
-          <label htmlFor="tri" className="text-ink-muted">Trier par</label>
-          <select
-            id="tri"
-            name="tri"
-            defaultValue={values.tri}
-            onChange={() => formRef.current?.requestSubmit()}
-            className="rounded-full border border-line bg-surface px-3 py-2 font-semibold text-ink focus:border-primary focus:outline-none"
+        <span className="mx-1 hidden h-6 w-px bg-line sm:block" aria-hidden />
+
+        {quick.map(({ label, icon: Icon, on, href }) => (
+          <Link
+            key={label}
+            href={href}
+            aria-pressed={on}
+            className={cn(
+              "inline-flex h-10 items-center gap-1.5 rounded-full border px-4 text-sm font-semibold transition-colors",
+              on ? "border-primary bg-primary-subtle text-primary-ink" : "border-line bg-surface text-ink hover:border-line-strong"
+            )}
           >
-            <option value="distance">Distance</option>
-            <option value="prix">Prix</option>
-            <option value="note">Note</option>
-          </select>
+            <Icon className="h-4 w-4" aria-hidden />
+            {label}
+          </Link>
+        ))}
+
+        <div className="ml-auto flex items-center gap-2 text-sm">
+          <label htmlFor="tri" className="text-ink-muted">
+            Trier par
+          </label>
+          <div className="relative">
+            <select
+              id="tri"
+              name="tri"
+              defaultValue={values.tri}
+              onChange={() => formRef.current?.requestSubmit()}
+              className="h-10 appearance-none rounded-full border border-line bg-surface pl-4 pr-9 font-semibold text-ink focus:border-primary focus:outline-none"
+            >
+              <option value="distance">Distance</option>
+              <option value="prix">Prix</option>
+              <option value="note">Note</option>
+            </select>
+            <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-muted" aria-hidden />
+          </div>
         </div>
       </div>
 
-      <fieldset id="filtres-avances" hidden={!showFilters} className="space-y-5 rounded-[var(--radius-card)] border border-line bg-surface p-5 shadow-card">
+      <fieldset id="filtres-avances" hidden={!showFilters} className="space-y-6 rounded-[24px] border border-line bg-surface p-6 shadow-card">
         <legend className="sr-only">Filtres avancés</legend>
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          <label className="space-y-1.5 text-sm font-semibold text-ink">
+          <label className="space-y-2 text-sm font-semibold text-ink">
             Budget maximum (€)
             <input name="budget" type="number" min={1} defaultValue={values.budget} placeholder="Sans limite" className={cn(field, "font-normal")} />
           </label>
-          <label className="space-y-1.5 text-sm font-semibold text-ink">
+          <label className="space-y-2 text-sm font-semibold text-ink">
             Rayon
-            <select name="rayon" defaultValue={String(values.rayon)} className={cn(field, "appearance-none font-normal")}>
-              {[2, 5, 10, 20, 50].map((km) => (
-                <option key={km} value={km}>
-                  {km} km
-                </option>
-              ))}
-            </select>
+            <span className="relative block">
+              <select name="rayon" defaultValue={String(values.rayon)} className={cn(selectField, "font-normal")}>
+                {[2, 5, 10, 20, 50].map((km) => (
+                  <option key={km} value={km}>
+                    {km} km
+                  </option>
+                ))}
+              </select>
+              <Chevron />
+            </span>
           </label>
-          <label className="space-y-1.5 text-sm font-semibold text-ink">
+          <label className="space-y-2 text-sm font-semibold text-ink">
             Note minimale
-            <select name="note" defaultValue={values.note ? String(values.note) : ""} className={cn(field, "appearance-none font-normal")}>
-              <option value="">Toutes</option>
-              <option value="4">4 et plus</option>
-              <option value="4.5">4,5 et plus</option>
-            </select>
+            <span className="relative block">
+              <select name="note" defaultValue={values.note ? String(values.note) : ""} className={cn(selectField, "font-normal")}>
+                <option value="">Toutes</option>
+                <option value="4">4 et plus</option>
+                <option value="4.5">4,5 et plus</option>
+              </select>
+              <Chevron />
+            </span>
           </label>
-          <label className="flex items-center gap-3 self-end rounded-full border border-line px-4 py-3 text-sm font-semibold text-ink">
+          <label className="flex h-[52px] items-center gap-3 self-end rounded-full border border-line px-[18px] text-sm font-semibold text-ink">
             <input type="checkbox" name="verifie" value="1" defaultChecked={values.verifie} className="h-5 w-5 accent-[var(--primary)]" />
             Hôte vérifié uniquement
           </label>
         </div>
 
-        <div className="space-y-2">
+        <div className="space-y-2.5">
           <p className="text-sm font-semibold text-ink">Équipements</p>
           <div className="flex flex-wrap gap-2">
             {amenities.map((a) => (
               <label key={a.code} className="cursor-pointer">
                 <input type="checkbox" name="equipements" value={a.code} defaultChecked={values.equipements.includes(a.code)} className="peer sr-only" />
-                <span className="inline-flex rounded-full border border-line bg-surface px-3.5 py-1.5 text-sm font-medium text-ink transition-colors hover:border-line-strong peer-checked:border-primary peer-checked:bg-primary-subtle peer-checked:text-primary-ink peer-focus-visible:outline-2 peer-focus-visible:outline-primary-ink">
+                <span className="inline-flex h-10 items-center rounded-full border border-line bg-surface px-4 text-sm font-semibold text-ink transition-colors hover:border-line-strong peer-checked:border-primary peer-checked:bg-primary-subtle peer-checked:text-primary-ink peer-focus-visible:outline-2 peer-focus-visible:outline-primary-ink">
                   {a.label}
                 </span>
               </label>
@@ -182,10 +262,10 @@ export function SearchForm({
           </div>
         </div>
 
-        <div className="flex justify-end gap-3">
-          <a href="/recherche" className="rounded-full px-4 py-2.5 text-sm font-semibold text-ink-muted hover:bg-canvas-alt hover:text-ink">
+        <div className="flex justify-end gap-3 border-t border-line pt-5">
+          <Link href="/recherche" className="flex h-11 items-center rounded-full px-5 text-sm font-semibold text-ink-muted hover:bg-canvas-alt hover:text-ink">
             Tout effacer
-          </a>
+          </Link>
           <Button type="submit">Appliquer</Button>
         </div>
       </fieldset>

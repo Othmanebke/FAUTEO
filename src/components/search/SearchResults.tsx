@@ -14,7 +14,7 @@ import type { MapPoint } from "./ResultsMap";
 // Leaflet a besoin du navigateur : chargé uniquement côté client
 const ResultsMap = dynamic(() => import("./ResultsMap"), {
   ssr: false,
-  loading: () => <Skeleton className="h-full w-full rounded-[var(--radius-card)]" />,
+  loading: () => <Skeleton className="h-full w-full rounded-[28px]" />,
 });
 
 export interface SearchResultItem {
@@ -62,7 +62,7 @@ export function SearchResults({ items, summary }: { items: SearchResultItem[]; s
   }
 
   return (
-    <div className="relative mt-6 lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(0,0.9fr)] lg:gap-8">
+    <div className="relative mt-6 lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(0,0.85fr)] lg:gap-8">
       <section aria-label="Résultats" className={cn(mobileView === "map" && "hidden lg:block")}>
         <p className="mb-4 text-sm font-semibold text-ink-muted" aria-live="polite">
           {summary}
@@ -85,7 +85,7 @@ export function SearchResults({ items, summary }: { items: SearchResultItem[]; s
         ref={mapSection}
         aria-label="Carte des résultats"
         className={cn(
-          "lg:sticky lg:top-24 lg:block lg:h-[calc(100dvh-8rem)]",
+          "lg:sticky lg:top-[100px] lg:block lg:h-[calc(100dvh-132px)]",
           mobileView === "map" ? "block h-[calc(100dvh-6rem)] scroll-mt-20" : "hidden"
         )}
       >

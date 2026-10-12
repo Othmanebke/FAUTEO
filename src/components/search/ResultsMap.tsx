@@ -21,7 +21,7 @@ function priceIcon(price: number, active: boolean) {
   return L.divIcon({
     className: "",
     iconSize: undefined,
-    html: `<span style="display:inline-block;transform:translate(-50%,-50%);white-space:nowrap;border-radius:9999px;padding:6px 10px;font:600 13px var(--font-manrope),sans-serif;box-shadow:0 4px 14px rgb(37 42 49/18%);border:1px solid ${active ? "#FF6B55" : "#E8E2DA"};background:${active ? "#FF6B55" : "#fff"};color:#252A31">${formatCents(price)}</span>`,
+    html: `<span style="display:inline-block;transform:translate(-50%,-50%);white-space:nowrap;border-radius:9999px;padding:6px 10px;font:600 13px var(--font-manrope),sans-serif;box-shadow:0 4px 14px rgb(37 42 49/18%);border:1px solid ${active ? "#252A31" : "#E8E2DA"};background:${active ? "#252A31" : "#fff"};color:${active ? "#FFF9F5" : "#252A31"}">${formatCents(price)}</span>`,
   });
 }
 
@@ -61,7 +61,7 @@ export default function ResultsMap({
   const center = useMemo<[number, number]>(() => (points[0] ? [points[0].lat, points[0].lng] : [48.8566, 2.3522]), [points]);
 
   return (
-    <MapContainer center={center} zoom={12} scrollWheelZoom className="h-full w-full rounded-[var(--radius-card)]">
+    <MapContainer center={center} zoom={12} scrollWheelZoom className="h-full w-full rounded-[28px] border border-line">
       <TileLayer url={TILE_URL} attribution={TILE_ATTRIBUTION} maxZoom={TILE_MAX_ZOOM} className="fauteo-tiles" />
       <FitBounds points={points} />
       {points.map((p) => (
