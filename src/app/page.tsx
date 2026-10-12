@@ -78,7 +78,7 @@ function PhoneMockup({ stations }: { stations: HomeStation[] }) {
   return (
     <div
       aria-hidden
-      className="absolute left-1/2 top-0 h-[560px] w-[330px] -translate-x-1/2 rounded-[56px] bg-[#1e2227] p-[11px] shadow-[0_40px_80px_rgb(37_42_49/25%),inset_0_0_0_2px_#3a4048] [mask-image:linear-gradient(180deg,#000_58%,transparent_92%)]"
+      className="relative h-[560px] w-[330px] rounded-[56px] bg-[#1e2227] p-[11px] shadow-[0_40px_80px_rgb(37_42_49/25%),inset_0_0_0_2px_#3a4048] [mask-image:linear-gradient(180deg,#000_58%,transparent_92%)]"
     >
       <div className="relative h-full overflow-hidden rounded-[46px] bg-canvas px-[18px] pt-3.5 text-left">
         <span className="mx-auto block h-[30px] w-[104px] rounded-full bg-[#1e2227]" />
@@ -148,9 +148,9 @@ export default async function HomePage() {
           <span aria-hidden className="pointer-events-none absolute -right-[160px] top-[440px] h-[360px] w-[560px] rounded-full bg-white opacity-90 blur-[44px]" />
           <span aria-hidden className="pointer-events-none absolute -top-[180px] left-1/2 h-[420px] w-[900px] -translate-x-1/2 rounded-full bg-[#ffc6b8] opacity-45 blur-[80px]" />
 
-          <div className="relative mx-auto flex max-w-[1216px] flex-col items-center px-4 pt-[132px] text-center sm:px-8 lg:pt-[176px]">
+          <div className="relative mx-auto flex max-w-[1216px] flex-col items-center px-4 pt-[116px] text-center sm:px-8 sm:pt-[132px] lg:pt-[176px]">
             <span className="text-[11px] font-bold uppercase tracking-[0.22em] text-primary-ink sm:text-[13px]">Location de postes · beauté &amp; bien-être</span>
-            <h1 className="mt-6 max-w-[900px] text-balance text-[44px] font-bold leading-[1.02] tracking-[-0.045em] text-ink sm:text-[60px] lg:text-[76px]">
+            <h1 className="mt-6 max-w-[900px] text-balance text-[40px] font-bold leading-[1.02] tracking-[-0.045em] text-ink sm:text-[60px] lg:text-[76px]">
               Le bon{" "}
               <span className="relative inline-block whitespace-nowrap">
                 poste
@@ -166,27 +166,40 @@ export default async function HomePage() {
               </span>
               , dans un lieu qui vous <span className="highlighter">ressemble</span>.
             </h1>
-            <p className="mt-[22px] max-w-[560px] text-pretty text-[17px] leading-[1.55] text-ink-muted sm:text-[19px]">
+            <p className="mt-[22px] max-w-[560px] text-pretty text-[15px] leading-[1.55] text-ink-muted sm:text-[19px]">
               Salons, barbershops, instituts, ongleries et shops de tatouage ouvrent leurs postes équipés aux indépendants, sans engagement long.
             </p>
-            <div className="mt-8 flex flex-wrap justify-center gap-2.5">
+            <div className="mt-8 flex w-full flex-col gap-2.5 sm:w-auto sm:flex-row sm:flex-wrap sm:justify-center">
               <Link
                 href="/recherche"
-                className="flex h-[54px] items-center gap-2 rounded-full bg-primary px-[26px] text-base font-semibold text-on-primary shadow-[0_10px_24px_rgb(255_107_85/30%)] transition-colors hover:bg-primary-hover"
+                className="flex h-[54px] items-center justify-center gap-2 rounded-full bg-primary px-[26px] text-base font-semibold text-on-primary shadow-[0_10px_24px_rgb(255_107_85/30%)] transition-colors hover:bg-primary-hover"
               >
                 <Search className="h-4 w-4" aria-hidden /> Trouver un poste
               </Link>
               <Link
                 href="/#hotes"
-                className="flex h-[54px] items-center rounded-full bg-surface px-[26px] text-base font-semibold text-ink shadow-card transition-colors hover:bg-canvas-alt"
+                className="flex h-[54px] items-center justify-center rounded-full bg-surface px-[26px] text-base font-semibold text-ink shadow-card transition-colors hover:bg-canvas-alt"
               >
                 Proposer mes postes
               </Link>
             </div>
 
             {/* Visuel : téléphone + cartes flottantes (illustration) */}
-            <div className="relative mt-16 h-[560px] w-full max-w-[1060px]">
-              <PhoneMockup stations={home.featured.slice(0, 3)} />
+            <div className="relative mt-12 h-[437px] w-full max-w-[1060px] sm:mt-16 sm:h-[504px] lg:h-[560px]">
+              <div className="absolute left-1/2 top-0 h-[560px] w-[330px] origin-top -translate-x-1/2 scale-[0.78] sm:scale-90 lg:scale-100">
+                <PhoneMockup stations={home.featured.slice(0, 3)} />
+              </div>
+              {/* Mobile et tablette : deux pilules posées sur les bords du téléphone */}
+              <div aria-hidden className="absolute left-1/2 top-3 -translate-x-[180px] sm:-translate-x-[230px] xl:hidden">
+                <span className={`${glassPill} px-3 py-2 text-[13px]`}>
+                  <ShieldCheck className="h-4 w-4" /> Caution non débitée
+                </span>
+              </div>
+              <div aria-hidden className="absolute left-1/2 top-[172px] translate-x-[18px] sm:top-[200px] sm:translate-x-[100px] xl:hidden">
+                <span className={`${glassPill} px-3 py-2 text-[13px]`}>
+                  <FileSignature className="h-4 w-4" /> Contrat en ligne
+                </span>
+              </div>
               <div aria-hidden className="absolute left-[150px] top-24 hidden xl:block">
                 <span className={glassPill}>
                   <ShieldCheck className="h-4 w-4" /> Caution non débitée
@@ -246,19 +259,20 @@ export default async function HomePage() {
 
         {/* Explorer par métier */}
         <section className="relative z-[1] bg-canvas">
-          <div className="mx-auto max-w-[1280px] px-4 pb-[104px] pt-[72px] sm:px-8">
-            <h2 className="text-[28px] font-bold tracking-[-0.02em] text-ink">Explorer par métier</h2>
-            <div className="mt-6 grid grid-cols-2 gap-5 sm:grid-cols-[repeat(auto-fit,minmax(180px,1fr))]">
+          <div className="mx-auto max-w-[1280px] px-4 pb-20 pt-12 sm:px-8 sm:pb-[104px] sm:pt-[72px]">
+            <h2 className="text-[22px] font-bold tracking-[-0.02em] text-ink sm:text-[28px]">Explorer par métier</h2>
+            <div className="-mx-4 mt-6 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-2 [scrollbar-width:none] md:mx-0 md:grid md:grid-cols-5 md:gap-5 md:overflow-visible md:px-0 md:pb-0 lg:grid-cols-[repeat(auto-fit,minmax(180px,1fr))]">
               {(Object.entries(TRADE_LABELS) as [Trade, string][]).map(([trade, label]) => {
                 const count = home.tradeCounts[trade] ?? 0;
                 return (
-                  <Link key={trade} href={`/recherche?metier=${trade}`} className="group flex flex-col gap-3 text-ink">
+                  <Link key={trade} href={`/recherche?metier=${trade}`} className="group flex w-[140px] shrink-0 snap-start flex-col gap-3 text-ink md:w-auto">
                     <StationImage src={null} alt={label} type={TRADE_TYPE[trade]} className="aspect-square rounded-[28px] transition-transform duration-300 group-hover:-translate-y-1" />
                     <span className="flex items-center justify-between px-1">
                       <span className="text-[17px] font-bold">{label}</span>
                       {count > 0 && (
                         <span className="text-sm text-ink-muted">
-                          {count} poste{count > 1 ? "s" : ""}
+                          {count}
+                          <span className="md:hidden lg:inline"> poste{count > 1 ? "s" : ""}</span>
                         </span>
                       )}
                     </span>
@@ -271,7 +285,7 @@ export default async function HomePage() {
 
         {/* Recommandés */}
         <section className={`${stacked} z-[2] bg-surface`}>
-          <div className="mx-auto max-w-[1280px] px-4 pb-[120px] pt-20 sm:px-8">
+          <div className="mx-auto max-w-[1280px] px-4 pb-24 pt-14 sm:px-8 sm:pb-[120px] sm:pt-20">
             <HomeRecommended stations={home.featured.slice(0, 16)} />
             <div className="mt-8 flex justify-center">
               <Link
@@ -286,7 +300,7 @@ export default async function HomePage() {
 
         {/* Comment ça marche */}
         <section id="fonctionnement" className={`${stacked} z-[3] scroll-mt-20 bg-canvas`}>
-          <div className="mx-auto max-w-[1280px] px-4 pb-[120px] pt-[88px] sm:px-8">
+          <div className="mx-auto max-w-[1280px] px-4 pb-24 pt-16 sm:px-8 sm:pb-[120px] sm:pt-[88px]">
             <div className="max-w-[640px]">
               <h2 className="text-[32px] font-bold tracking-[-0.02em] text-ink sm:text-[40px]">Comment ça marche</h2>
               <p className="mt-3 text-lg text-ink-muted">Un même compte pour louer un poste et pour proposer les vôtres.</p>
@@ -317,7 +331,7 @@ export default async function HomePage() {
 
         {/* Frais */}
         <section className={`${stacked} z-[4] bg-surface`}>
-          <div className="mx-auto grid max-w-[1280px] items-center gap-12 px-4 pb-32 pt-24 sm:px-8 lg:grid-cols-2">
+          <div className="mx-auto grid max-w-[1280px] items-center gap-12 px-4 pb-24 pt-16 sm:px-8 sm:pb-32 sm:pt-24 lg:grid-cols-2">
             <div>
               <h2 className="text-pretty text-[32px] font-bold tracking-[-0.02em] text-ink sm:text-[40px]">Des frais affichés, rien de caché</h2>
               <p className="mt-4 text-lg leading-[1.6] text-ink-muted">
@@ -355,7 +369,7 @@ export default async function HomePage() {
 
         {/* Confiance */}
         <section id="confiance" className={`${stacked} z-[5] scroll-mt-20 bg-canvas-alt`}>
-          <div className="mx-auto max-w-[1280px] px-4 pb-[120px] pt-[88px] sm:px-8">
+          <div className="mx-auto max-w-[1280px] px-4 pb-24 pt-16 sm:px-8 sm:pb-[120px] sm:pt-[88px]">
             <h2 className="text-[32px] font-bold tracking-[-0.02em] text-ink sm:text-[40px]">Un cadre de confiance</h2>
             <p className="mt-3 text-lg text-ink-muted">Chaque location est vérifiée, payée et encadrée par un contrat.</p>
             <ul className="mt-11 grid gap-5 sm:grid-cols-[repeat(auto-fit,minmax(220px,1fr))]">
@@ -374,7 +388,7 @@ export default async function HomePage() {
 
         {/* Appel à l'action */}
         <section className={`${stacked} z-[6] bg-canvas`}>
-          <div className="mx-auto max-w-[1280px] px-4 pb-[120px] pt-[88px] sm:px-8">
+          <div className="mx-auto max-w-[1280px] px-4 pb-24 pt-16 sm:px-8 sm:pb-[120px] sm:pt-[88px]">
             <div className="flex flex-wrap items-center justify-between gap-6 rounded-[36px] bg-surface-soft px-7 py-10 sm:px-14 sm:py-[52px]">
               <div className="max-w-[620px]">
                 <h2 className="text-[30px] font-bold tracking-[-0.02em] text-ink sm:text-[36px]">Prêt à trouver votre place ?</h2>

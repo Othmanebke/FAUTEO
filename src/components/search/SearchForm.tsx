@@ -76,17 +76,52 @@ export function SearchForm({ values, amenities }: { values: SearchFormValues; am
   const [unit, setUnit] = useState<PriceUnit | "">(values.duree ?? "");
   const activeFilters = (values.budget ? 1 : 0) + (values.note ? 1 : 0) + (values.verifie ? 1 : 0) + values.equipements.length + (values.rayon !== 10 ? 1 : 0);
   const [showFilters, setShowFilters] = useState(false);
+  // Mobile : résumé compact, formulaire complet à la demande
+  const [expanded, setExpanded] = useState(false);
+
+  const summaryTitle = [values.metier ? TRADE_LABELS[values.metier] : "Tous les métiers", values.place?.label ?? "Partout"].join(" · ");
+  const summaryDetails = [
+    values.date ? new Date(values.date + "T12:00:00").toLocaleDateString("fr-FR", { day: "numeric", month: "short" }) : "Toutes dates",
+    values.duree ? values.nb + " " + QUANTITY_LABEL[values.duree] : null,
+    values.rayon + " km",
+  ]
+    .filter(Boolean)
+    .join(" · ");
 
   // Filtres rapides : bascules en un clic (liens vers l'URL modifiée)
   const quick = [
     { label: "Hôte vérifié", icon: BadgeCheck, on: values.verifie, href: searchHref(values, { verifie: values.verifie ? null : "1" }) },
     { label: "Note 4,5 et plus", icon: Star, on: values.note === 4.5, href: searchHref(values, { note: values.note === 4.5 ? null : "4.5" }) },
-    { label: "50 € maximum", icon: Wallet, on: values.budget === 50, href: searchHref(values, { budget: values.budget === 50 ? null : "50" }) },
+    { label: "Moins de 60 €", icon: Wallet, on: values.budget === 60, href: searchHref(values, { budget: values.budget === 60 ? null : "60" }) },
   ];
 
   return (
     <form ref={formRef} action="/recherche" method="get" className="space-y-3.5" role="search" aria-label="Rechercher un poste">
-      <div className="grid grid-cols-2 gap-2 rounded-[28px] border border-line bg-surface p-2.5 shadow-card md:grid-cols-[1fr_1.4fr_1fr_1fr_auto] md:gap-2.5 md:p-3">
+      {/* Mobile : résumé de la recherche en pilule */}
+      {!expanded && (
+        <button
+          type="button"
+          onClick={() => setExpanded(true)}
+          aria-expanded={expanded}
+          className="flex w-full items-center gap-3 rounded-full border border-line bg-surface py-2 pl-5 pr-2 text-left shadow-card md:hidden"
+        >
+          <Search className="h-5 w-5 shrink-0 text-ink" aria-hidden />
+          <span className="min-w-0 flex-1">
+            <span className="block truncate text-[15px] font-bold text-ink">{summaryTitle}</span>
+            <span className="block truncate text-[13px] text-ink-muted">{summaryDetails}</span>
+          </span>
+          <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-primary text-on-primary">
+            <SlidersHorizontal className="h-[18px] w-[18px]" aria-hidden />
+          </span>
+          <span className="sr-only">Modifier la recherche</span>
+        </button>
+      )}
+      <div
+        className={cn(
+          "grid grid-cols-2 gap-2 rounded-[28px] border border-line bg-surface p-2.5 shadow-card md:grid-cols-[1fr_1fr_auto] md:gap-2.5 md:p-3 lg:grid-cols-[1fr_1.4fr_1fr_1fr_auto]",
+          !expanded && "hidden md:grid"
+        )}
+      >
         <div className="relative">
           <label className="sr-only" htmlFor="metier">
             Métier
@@ -102,7 +137,7 @@ export function SearchForm({ values, amenities }: { values: SearchFormValues; am
           <Chevron />
         </div>
 
-        <PlaceInput defaultPlace={values.place} className="col-span-2 row-start-1 md:col-span-1 md:row-start-auto" inputClassName="h-[52px]" />
+        <PlaceInput defaultPlace={values.place} className="col-span-2 row-start-1 md:row-start-auto lg:col-span-1" inputClassName="h-[52px]" />
 
         <div className="relative">
           <label className="sr-only" htmlFor="duree">
@@ -128,7 +163,7 @@ export function SearchForm({ values, amenities }: { values: SearchFormValues; am
 
         <Button type="submit" size="lg" className="h-[52px] px-6">
           <Search className="h-4 w-4" aria-hidden />
-          <span className="md:sr-only lg:not-sr-only">Rechercher</span>
+          <span>Rechercher</span>
         </Button>
       </div>
       <p id="date-aide" className="sr-only">
@@ -138,7 +173,7 @@ export function SearchForm({ values, amenities }: { values: SearchFormValues; am
       {/* Mobile : rangée défilante ; desktop : retour à la ligne */}
       <div className="-mx-4 flex items-center gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none] sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0 sm:pb-0 [&>*]:shrink-0">
         {unit && (
-          <div className="flex h-10 items-center gap-2 rounded-full border border-line bg-surface px-4 text-sm">
+          <div className={cn("h-10 items-center gap-2 rounded-full border border-line bg-surface px-4 text-sm", expanded ? "flex" : "hidden md:flex")}>
             {(unit === "hour" || unit === "half_day") && (
               <>
                 <label htmlFor="heure" className="text-ink-muted">

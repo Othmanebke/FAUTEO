@@ -2,7 +2,7 @@ import { Suspense } from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Armchair, ArrowLeft, BadgeCheck, Brush, CalendarClock, Clock, Hand, MapPin, PenTool, Ruler, Scissors, Zap } from "lucide-react";
+import { Armchair, ArrowLeft, BadgeCheck, Brush, CalendarClock, Clock, Hand, MapPin, PenTool, Ruler, Scissors, ShieldCheck, Zap } from "lucide-react";
 import { Navbar } from "@/components/shared/Navbar";
 import { Footer } from "@/components/shared/Footer";
 import { QuoteWidget } from "@/components/stations/QuoteWidget";
@@ -73,16 +73,17 @@ async function StationContent({ params, searchParams }: { params: Params; search
   const rating = station.rating_count > 0 ? formatRating(station.rating_avg) : null;
   const TypeIcon = TYPE_ICONS[station.type];
   const amenities = [...detail.stationAmenities, ...detail.venueAmenities];
+  const barPrice = prices.find(([u]) => u === "day") ?? prices[0];
 
   return (
-    <article>
-      <Link href="/recherche" className="inline-flex items-center gap-2 text-sm font-semibold text-ink-muted hover:text-ink">
+    <article className="flex flex-col">
+      <Link href="/recherche" className="hidden items-center gap-2 text-sm font-semibold text-ink-muted hover:text-ink md:inline-flex md:self-start">
         <ArrowLeft className="h-4 w-4" aria-hidden /> Retour aux résultats
       </Link>
 
-      <header className="mb-6 mt-5 flex flex-wrap items-end justify-between gap-6">
+      <header className="relative z-10 -mx-4 -mt-7 mb-6 flex flex-wrap items-end justify-between gap-6 rounded-t-[28px] bg-canvas px-4 pt-6 md:mx-0 md:mt-5 md:rounded-none md:bg-transparent md:px-0 md:pt-0">
         <div>
-          <h1 className="text-[32px] font-bold tracking-[-0.02em] text-ink sm:text-[40px]">{station.title}</h1>
+          <h1 className="text-[26px] font-bold leading-[1.15] tracking-[-0.02em] text-ink sm:text-[32px] lg:text-[40px]">{station.title}</h1>
           <div className="mt-3 flex flex-wrap items-center gap-x-[18px] gap-y-2.5 text-[15px]">
             {rating ? (
               <span className="font-semibold text-ink">
@@ -106,15 +107,17 @@ async function StationContent({ params, searchParams }: { params: Params; search
             )}
           </div>
         </div>
-        <div className="flex gap-2">
+        <div className="hidden gap-2 lg:flex">
           <ShareButton title={station.title} />
           <SaveButton stationId={station.id} variant="pill" />
         </div>
       </header>
 
-      <StationGallery photos={photos} title={station.title} type={station.type} />
+      <div className="order-first md:order-none">
+        <StationGallery photos={photos} title={station.title} type={station.type} stationId={station.id} />
+      </div>
 
-      <div className="mt-11 grid items-start gap-14 lg:grid-cols-[minmax(0,1fr)_400px]">
+      <div className="grid items-start gap-10 md:mt-8 lg:mt-11 lg:grid-cols-[minmax(0,1fr)_400px] lg:gap-14">
         <div className="flex flex-col gap-8">
           <div className="grid grid-cols-3 gap-3">
             {[
@@ -267,7 +270,7 @@ async function StationContent({ params, searchParams }: { params: Params; search
           </Section>
         </div>
 
-        <aside className="lg:sticky lg:top-[100px]" aria-label="Réserver">
+        <aside id="reserver" className="scroll-mt-24 lg:sticky lg:top-[100px]" aria-label="Réserver">
           <QuoteWidget
             stationId={station.id}
             prices={prices}
@@ -278,6 +281,29 @@ async function StationContent({ params, searchParams }: { params: Params; search
           />
         </aside>
       </div>
+
+      {/* Mobile et tablette : barre de réservation collée en bas */}
+      {barPrice && (
+        <div className="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-surface/95 px-4 py-3 shadow-[0_-10px_30px_rgb(37_42_49/8%)] backdrop-blur sm:px-8 lg:hidden">
+          <div className="mx-auto flex max-w-[1280px] items-center justify-between gap-4">
+            <div>
+              <p className="text-ink">
+                <span className="text-xl font-bold tabular-nums">{formatCents(barPrice[1])}</span>
+                <span className="text-sm text-ink-muted"> / {PRICE_UNIT_LABELS[barPrice[0]].short}</span>
+              </p>
+              {station.deposit_cents > 0 && (
+                <p className="flex items-center gap-1.5 text-[13px] text-ink-muted">
+                  <ShieldCheck className="h-3.5 w-3.5 text-success" aria-hidden /> Caution {formatCents(station.deposit_cents)} · non débitée
+                </p>
+              )}
+            </div>
+            <a href="#reserver" className="flex h-12 shrink-0 items-center gap-2 rounded-full bg-primary px-6 text-base font-semibold text-on-primary transition-colors hover:bg-primary-hover">
+              {station.booking_mode === "instant" ? <Zap className="h-4 w-4" aria-hidden /> : null}
+              Réserver
+            </a>
+          </div>
+        </div>
+      )}
     </article>
   );
 }
@@ -285,8 +311,8 @@ async function StationContent({ params, searchParams }: { params: Params; search
 export default function StationPage({ params, searchParams }: { params: Params; searchParams: SearchParams }) {
   return (
     <>
-      <Navbar />
-      <main className="mx-auto w-full max-w-[1280px] flex-1 px-4 pb-[88px] pt-8 sm:px-8">
+      <Navbar hideOnMobile />
+      <main className="mx-auto w-full max-w-[1280px] flex-1 px-4 pb-32 pt-8 sm:px-8 lg:pb-[88px]">
         <Suspense
           fallback={
             <div className="space-y-6">

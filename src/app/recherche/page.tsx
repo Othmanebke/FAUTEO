@@ -79,7 +79,7 @@ export default function SearchPage({ searchParams }: { searchParams: SearchParam
     <>
       <Navbar />
       <main className="mx-auto w-full max-w-[1280px] flex-1 px-4 pb-24 pt-8 sm:px-8">
-        <h1 className="mb-6 text-[32px] font-bold tracking-[-0.02em] text-ink sm:text-[40px]">Trouver un poste</h1>
+        <h1 className="mb-5 text-[24px] font-bold tracking-[-0.02em] text-ink sm:mb-6 sm:text-[32px] lg:text-[40px]">Trouver un poste</h1>
         <Suspense fallback={<Skeleton className="h-[136px] rounded-[28px]" />}>
           <Form searchParams={searchParams} />
         </Suspense>

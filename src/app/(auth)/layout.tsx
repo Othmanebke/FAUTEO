@@ -63,7 +63,30 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
           </Suspense>
         </div>
 
-        <div className="flex flex-1 items-center justify-center py-10">
+        {/* Mobile et tablette : bannière d'ambiance (et garanties en tablette) à la place du panneau latéral */}
+        <div className="mt-5 lg:hidden">
+          <div className="relative flex h-[140px] items-end overflow-hidden rounded-[28px] p-5 sm:h-[200px] sm:p-7">
+            <div aria-hidden className="absolute inset-0 bg-[radial-gradient(120%_80%_at_20%_10%,#ffb39f_0%,#ff8a72_30%,#c2412f_62%,#252a31_100%)]" />
+            <div aria-hidden className="absolute inset-0 bg-[linear-gradient(180deg,rgb(37_42_49/10%)_0%,rgb(37_42_49/70%)_100%)]" />
+            <p className="relative text-[24px] font-bold leading-[1.1] tracking-[-0.02em] text-white sm:text-[32px]">
+              Le bon poste,
+              <br />
+              au bon endroit.
+            </p>
+          </div>
+          <ul className="mt-4 hidden grid-cols-3 gap-3 sm:grid">
+            {PROMISES.map(({ icon: Icon, title }) => (
+              <li key={title} className="flex items-center gap-2.5 rounded-2xl border border-line bg-surface px-3.5 py-3 text-sm font-semibold text-ink">
+                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-primary-subtle">
+                  <Icon className="h-4 w-4 text-primary-ink" aria-hidden />
+                </span>
+                {title}
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div className="flex flex-1 items-center justify-center py-8 lg:py-10">
           <div className="w-full max-w-[440px]">
             <Suspense fallback={<Skeleton className="h-96" />}>{children}</Suspense>
           </div>

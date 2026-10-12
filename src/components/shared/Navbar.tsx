@@ -26,11 +26,11 @@ async function NavbarSession({ variant }: { variant: NavbarVariant }) {
  * - floating : pilule blanche flottante posée sur le hero (accueil) ;
  * - bar      : barre classique translucide avec bordure basse (autres pages).
  */
-export function Navbar({ variant = "bar" }: { variant?: NavbarVariant }) {
+export function Navbar({ variant = "bar", hideOnMobile = false }: { variant?: NavbarVariant; hideOnMobile?: boolean }) {
   const floating = variant === "floating";
 
   return (
-    <header className={cn("sticky top-0 z-40", floating ? "h-0" : "border-b border-line/80 bg-canvas/88 backdrop-blur-[12px]")}>
+    <header className={cn("sticky top-0 z-40", floating ? "h-0" : "border-b border-line/80 bg-canvas/88 backdrop-blur-[12px]", hideOnMobile && "hidden md:block")}>
       <div
         className={cn(
           "flex items-center justify-between",
