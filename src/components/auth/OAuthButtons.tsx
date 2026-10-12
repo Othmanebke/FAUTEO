@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
-import { buttonClasses } from "@/components/ui/Button";
 import { Alert } from "@/components/ui/Alert";
 
 type Provider = "google" | "apple";
@@ -25,6 +24,9 @@ function AppleIcon() {
     </svg>
   );
 }
+
+const oauthButton =
+  "flex h-[52px] items-center justify-center gap-2.5 rounded-full border border-line bg-surface text-[15px] font-semibold text-ink transition-colors hover:border-line-strong hover:bg-canvas-alt disabled:opacity-60";
 
 /** Connexion Google / Apple (F-01). Les fournisseurs s'activent dans la console Supabase. */
 export function OAuthButtons({ next }: { next?: string }) {
@@ -49,11 +51,11 @@ export function OAuthButtons({ next }: { next?: string }) {
 
   return (
     <div className="space-y-3">
-      <div className="grid gap-3 sm:grid-cols-2">
-        <button type="button" disabled={pending !== null} onClick={() => signInWith("google")} className={buttonClasses({ variant: "secondary" })}>
+      <div className="grid grid-cols-2 gap-3">
+        <button type="button" disabled={pending !== null} onClick={() => signInWith("google")} className={oauthButton}>
           <GoogleIcon /> Google
         </button>
-        <button type="button" disabled={pending !== null} onClick={() => signInWith("apple")} className={buttonClasses({ variant: "secondary" })}>
+        <button type="button" disabled={pending !== null} onClick={() => signInWith("apple")} className={oauthButton}>
           <AppleIcon /> Apple
         </button>
       </div>

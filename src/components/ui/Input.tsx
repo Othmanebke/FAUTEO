@@ -2,7 +2,7 @@ import React, { useId } from "react";
 import { cn } from "@/lib/utils";
 
 const control =
-  "w-full rounded-xl border border-line bg-surface px-4 text-[15px] text-ink placeholder:text-ink-muted/70 " +
+  "w-full rounded-2xl border border-line bg-surface px-4 text-[15px] text-ink placeholder:text-[#9a9fa5] " +
   "transition-[border-color,box-shadow] duration-150 " +
   "hover:border-line-strong focus:border-primary focus:outline-none focus:ring-4 focus:ring-[var(--ring)] " +
   "disabled:cursor-not-allowed disabled:bg-canvas-alt aria-[invalid=true]:border-danger aria-[invalid=true]:focus:ring-danger/20";
@@ -24,7 +24,7 @@ function Field({
   children,
 }: FieldProps & { id: string; children: React.ReactNode }) {
   return (
-    <div className="w-full space-y-1.5">
+    <div className="w-full space-y-2">
       {label && (
         <label htmlFor={id} className="flex items-baseline justify-between text-sm font-semibold text-ink">
           {label}
@@ -73,7 +73,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             id={inputId}
             aria-invalid={error ? true : undefined}
             aria-describedby={describedBy(inputId, error, hint)}
-            className={cn(control, "h-12", leftIcon && "pl-11", rightSlot && "pr-12", className)}
+            className={cn(control, "h-[52px]", leftIcon && "pl-[46px]", rightSlot && "pr-[52px]", className)}
             {...props}
           />
           {rightSlot && <span className="absolute right-2 flex items-center">{rightSlot}</span>}
@@ -97,7 +97,7 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
           id={selectId}
           aria-invalid={error ? true : undefined}
           aria-describedby={describedBy(selectId, error, hint)}
-          className={cn(control, "h-12 appearance-none bg-[length:16px] bg-[right_1rem_center] bg-no-repeat pr-10",
+          className={cn(control, "h-[52px] appearance-none bg-[length:16px] bg-[right_1rem_center] bg-no-repeat pr-10",
             "bg-[url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23697078' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E\")]",
             className)}
           {...props}

@@ -9,9 +9,9 @@ export const metadata: Metadata = { title: "Nouveau mot de passe" };
 export default async function ResetPasswordPage() {
   await requireSession("/reset-password");
   return (
-    <>
+    <div className="flex flex-col gap-7">
       <AuthHeading title="Nouveau mot de passe" subtitle="Choisissez un mot de passe que vous n'utilisez pas ailleurs." />
       <ResetPasswordForm />
-    </>
+    </div>
   );
 }

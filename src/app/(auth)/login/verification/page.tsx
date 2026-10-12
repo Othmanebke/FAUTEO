@@ -12,12 +12,12 @@ export default async function MfaVerificationPage({ searchParams }: { searchPara
   const { next } = await searchParams;
 
   return (
-    <>
+    <div className="flex flex-col gap-7">
       <AuthHeading
         title="Vérification en deux étapes"
         subtitle="Saisissez le code à 6 chiffres affiché dans votre application d'authentification."
       />
       <MfaVerifyForm next={safeNext(next, "/")} />
-    </>
+    </div>
   );
 }

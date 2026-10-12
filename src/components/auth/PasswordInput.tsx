@@ -16,7 +16,7 @@ export function PasswordInput(props: Omit<InputProps, "type" | "rightSlot">) {
           onClick={() => setVisible((v) => !v)}
           aria-label={visible ? "Masquer le mot de passe" : "Afficher le mot de passe"}
           aria-pressed={visible}
-          className="rounded-full p-2 text-ink-muted hover:bg-canvas-alt hover:text-ink"
+          className="flex h-9 w-9 items-center justify-center rounded-full text-ink-muted hover:bg-canvas-alt hover:text-ink"
         >
           {visible ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
         </button>

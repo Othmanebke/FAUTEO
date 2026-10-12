@@ -1,3 +1,4 @@
+import { useId } from "react";
 import { cn } from "@/lib/utils";
 
 /**
@@ -6,6 +7,8 @@ import { cn } from "@/lib/utils";
  * à remplacer par le fichier source du designer dès qu'il est disponible.
  */
 export function LogoMark({ className, title }: { className?: string; title?: string }) {
+  // Identifiant unique : un dégradé déclaré dans un logo masqué (display:none) serait introuvable
+  const gradientId = `fauteo-pin-${useId().replace(/:/g, "")}`;
   return (
     <svg
       viewBox="0 0 48 56"
@@ -15,14 +18,14 @@ export function LogoMark({ className, title }: { className?: string; title?: str
       aria-label={title}
     >
       <defs>
-        <linearGradient id="fauteo-pin" x1="8" y1="4" x2="40" y2="50" gradientUnits="userSpaceOnUse">
+        <linearGradient id={gradientId} x1="8" y1="4" x2="40" y2="50" gradientUnits="userSpaceOnUse">
           <stop offset="0" stopColor="#FF8A72" />
           <stop offset="1" stopColor="#FF6B55" />
         </linearGradient>
       </defs>
       <path
         d="M24 2C12.4 2 3 11.3 3 22.8c0 8 5.1 14.4 10.4 20L21.9 51.7a2.9 2.9 0 0 0 4.2 0l8.5-8.9C39.9 37.2 45 30.8 45 22.8 45 11.3 35.6 2 24 2Z"
-        fill="url(#fauteo-pin)"
+        fill={`url(#${gradientId})`}
       />
       <g fill="none" stroke="#fff" strokeWidth="4.4" strokeLinecap="round" strokeLinejoin="round">
         <path d="M17.5 35V18.8c0-2.4 1.9-4.3 4.3-4.3h8.7" />
