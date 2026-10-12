@@ -13,7 +13,7 @@ const pin = L.divIcon({
 /** Carte de localisation d'un lieu (fiche d'un poste). */
 export default function LocationMap({ lat, lng, label }: { lat: number; lng: number; label: string }) {
   return (
-    <MapContainer center={[lat, lng]} zoom={15} scrollWheelZoom={false} className="h-72 w-full rounded-[var(--radius-card)]">
+    <MapContainer center={[lat, lng]} zoom={15} scrollWheelZoom={false} className="h-[300px] w-full">
       <TileLayer url={TILE_URL} attribution={TILE_ATTRIBUTION} maxZoom={TILE_MAX_ZOOM} className="fauteo-tiles" />
       <Marker position={[lat, lng]} icon={pin} title={label} />
     </MapContainer>

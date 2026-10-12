@@ -41,7 +41,24 @@ async function CurrentYear() {
  * Pied de page. `rounded` : bord supérieur arrondi qui chevauche la
  * section précédente (empilement des sections de l'accueil).
  */
-export function Footer({ rounded = false }: { rounded?: boolean }) {
+export function Footer({ rounded = false, compact = false }: { rounded?: boolean; compact?: boolean }) {
+  // Variante compacte (fiche d'un poste) : une seule ligne de mentions
+  if (compact) {
+    return (
+      <footer className="mt-auto border-t border-line bg-canvas-alt">
+        <div className="mx-auto flex max-w-[1280px] flex-wrap justify-between gap-4 px-4 py-7 text-sm text-ink-muted sm:px-8">
+          <p>
+            © <CurrentYear /> Fauteo. Tous droits réservés.
+          </p>
+          <p className="flex flex-wrap gap-5">
+            <span>Paiements sécurisés par Stripe</span>
+            <span>Données hébergées dans l&apos;UE</span>
+          </p>
+        </div>
+      </footer>
+    );
+  }
+
   return (
     <footer
       className={cn(
