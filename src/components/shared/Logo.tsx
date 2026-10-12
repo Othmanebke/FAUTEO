@@ -32,15 +32,28 @@ export function LogoMark({ className, title }: { className?: string; title?: str
   );
 }
 
-export function Logo({ className, withTagline = false }: { className?: string; withTagline?: boolean }) {
+const SIZES = {
+  xs: { mark: "h-7", word: "text-[17px]", tagline: "mt-[3px] text-[8px]" },
+  sm: { mark: "h-7", word: "text-[18px]", tagline: "mt-1 text-[9px]" },
+  md: { mark: "h-8", word: "text-[19px]", tagline: "mt-1 text-[9px]" },
+} as const;
+
+export function Logo({
+  className,
+  withTagline = false,
+  size = "md",
+}: {
+  className?: string;
+  withTagline?: boolean;
+  size?: keyof typeof SIZES;
+}) {
+  const s = SIZES[size];
   return (
     <span className={cn("inline-flex items-center gap-2.5", className)}>
-      <LogoMark />
+      <LogoMark className={s.mark} />
       <span className="flex flex-col leading-none">
-        <span className="text-[19px] font-extrabold tracking-[0.08em] text-ink">FAUTEO</span>
-        {withTagline && (
-          <span className="mt-1 text-[9px] font-semibold tracking-[0.28em] text-ink-muted">LA CONNEXION &amp; LE LIEU</span>
-        )}
+        <span className={cn(s.word, "font-extrabold tracking-[0.08em] text-ink")}>FAUTEO</span>
+        {withTagline && <span className={cn(s.tagline, "font-semibold tracking-[0.28em] text-ink-muted")}>LA CONNEXION &amp; LE LIEU</span>}
       </span>
     </span>
   );

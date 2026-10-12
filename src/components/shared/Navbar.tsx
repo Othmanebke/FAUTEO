@@ -1,11 +1,12 @@
 import { Suspense } from "react";
 import Link from "next/link";
 import { getSession } from "@/lib/auth/session";
+import { cn } from "@/lib/utils";
 import { Logo } from "./Logo";
-import { NavbarClient, type NavUser } from "./NavbarClient";
+import { NavbarClient, type NavbarVariant, type NavUser } from "./NavbarClient";
 
 /** Partie de l'en-tête qui dépend de la session, rendue à la requête. */
-async function NavbarSession() {
+async function NavbarSession({ variant }: { variant: NavbarVariant }) {
   const session = await getSession();
   const user: NavUser | null = session
     ? {
@@ -17,19 +18,32 @@ async function NavbarSession() {
         activeRole: session.profile.active_role,
       }
     : null;
-  return <NavbarClient user={user} />;
+  return <NavbarClient user={user} variant={variant} />;
 }
 
-/** En-tête du site : la structure est statique, la zone compte arrive en streaming. */
-export function Navbar() {
+/**
+ * En-tête du site. La structure est statique, la zone compte arrive en streaming.
+ * - floating : pilule blanche flottante posée sur le hero (accueil) ;
+ * - bar      : barre classique translucide avec bordure basse (autres pages).
+ */
+export function Navbar({ variant = "bar" }: { variant?: NavbarVariant }) {
+  const floating = variant === "floating";
+
   return (
-    <header className="sticky top-0 z-40 border-b border-line/80 bg-canvas/85 backdrop-blur-md">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-6 px-4 sm:px-6 lg:h-18 lg:px-8">
-        <Link href="/" aria-label="Fauteo, accueil" className="rounded-lg">
-          <Logo />
+    <header className={cn("sticky top-0 z-40", floating ? "h-0" : "border-b border-line/80 bg-canvas/88 backdrop-blur-[12px]")}>
+      <div
+        className={cn(
+          "flex items-center justify-between",
+          floating
+            ? "relative top-3 mx-auto box-border h-[68px] w-[calc(100%-24px)] max-w-[1040px] gap-5 rounded-full border border-white/70 bg-white/90 pl-[22px] pr-2.5 shadow-[0_10px_30px_rgb(37_42_49/8%)] backdrop-blur-[14px] sm:top-5 sm:w-[calc(100%-48px)]"
+            : "relative mx-auto h-16 max-w-[1280px] gap-6 px-4 sm:px-8 lg:h-[76px]"
+        )}
+      >
+        <Link href="/" aria-label="Fauteo, accueil" className="shrink-0 rounded-lg">
+          <Logo size={floating ? "sm" : "md"} />
         </Link>
         <Suspense fallback={<div className="h-10 w-44" aria-hidden />}>
-          <NavbarSession />
+          <NavbarSession variant={variant} />
         </Suspense>
       </div>
     </header>

@@ -18,12 +18,16 @@ export interface NavUser {
   activeRole: AppRole | null;
 }
 
-const PUBLIC_LINKS = [
-  { href: "/recherche", label: "Trouver un poste" },
-  { href: "/#fonctionnement", label: "Comment ça marche" },
-  { href: "/#hotes", label: "Proposer un poste" },
-  { href: "/#confiance", label: "Confiance et sécurité" },
-];
+export type NavbarVariant = "floating" | "bar";
+
+function publicLinks(variant: NavbarVariant) {
+  return [
+    { href: "/recherche", label: "Trouver un poste" },
+    { href: "/#fonctionnement", label: "Comment ça marche" },
+    { href: "/#hotes", label: "Proposer un poste" },
+    { href: "/#confiance", label: variant === "floating" ? "Confiance" : "Confiance et sécurité" },
+  ];
+}
 
 function spaceHref(user: NavUser) {
   if (user.isAdmin) return "/admin";
@@ -31,12 +35,13 @@ function spaceHref(user: NavUser) {
   return (user.activeRole ?? (user.isPro ? "pro" : "host")) === "host" ? "/host" : "/pro";
 }
 
-export function NavbarClient({ user }: { user: NavUser | null }) {
+export function NavbarClient({ user, variant = "bar" }: { user: NavUser | null; variant?: NavbarVariant }) {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [pending, startTransition] = useTransition();
   const menuRef = useRef<HTMLDivElement>(null);
+  const floating = variant === "floating";
 
   // Fermeture du menu compte au clic extérieur et à la touche Échap
   useEffect(() => {
@@ -67,34 +72,35 @@ export function NavbarClient({ user }: { user: NavUser | null }) {
       ]
     : [];
 
+  const navLinks = user ? [{ href: "/recherche", label: "Trouver un poste" }] : publicLinks(variant);
+  const isActive = (href: string) => !href.includes("#") && (pathname === href || pathname.startsWith(`${href}/`));
+
+  // Lien de navigation : barre pilule (accueil) = texte encre ; barre classique = texte gris, actif sur fond
+  const linkClass = (href: string) =>
+    cn(
+      "whitespace-nowrap rounded-full px-3.5 py-[9px] text-[15px] transition-colors hover:bg-canvas-alt",
+      floating
+        ? "font-medium text-ink"
+        : isActive(href)
+          ? "bg-canvas-alt font-semibold text-ink"
+          : "font-medium text-ink-muted hover:text-ink"
+    );
+
   return (
     <>
       {/* Navigation desktop */}
-      <nav aria-label="Navigation principale" className="hidden flex-1 items-center justify-center gap-1 md:flex">
-        {!user &&
-          PUBLIC_LINKS.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="rounded-full px-3.5 py-2 text-[15px] font-medium text-ink-muted transition-colors hover:bg-canvas-alt hover:text-ink"
-            >
-              {link.label}
-            </Link>
-          ))}
-        {user && (
-          <Link
-            href="/recherche"
-            className="rounded-full px-3.5 py-2 text-[15px] font-medium text-ink-muted transition-colors hover:bg-canvas-alt hover:text-ink"
-          >
-            Trouver un poste
+      <nav aria-label="Navigation principale" className={cn("hidden h-10 min-w-0 flex-1 flex-wrap justify-center overflow-hidden md:flex", floating ? "gap-0.5" : "gap-1")}>
+        {navLinks.map((link) => (
+          <Link key={link.href} href={link.href} aria-current={isActive(link.href) ? "page" : undefined} className={linkClass(link.href)}>
+            {link.label}
           </Link>
-        )}
+        ))}
         {user && bothRoles && (
           <button
             type="button"
             disabled={pending}
             onClick={() => startTransition(() => switchActiveRole(otherRole))}
-            className="inline-flex items-center gap-2 rounded-full border border-line bg-surface px-4 py-2 text-sm font-semibold text-ink transition-colors hover:border-line-strong disabled:opacity-60"
+            className="inline-flex items-center gap-2 whitespace-nowrap rounded-full border border-line bg-surface px-4 py-2 text-sm font-semibold text-ink transition-colors hover:border-line-strong disabled:opacity-60"
           >
             <ArrowLeftRight className="h-4 w-4 text-primary" aria-hidden />
             Passer en espace {otherRole === "host" ? "Hôte" : "Pro"}
@@ -102,7 +108,7 @@ export function NavbarClient({ user }: { user: NavUser | null }) {
         )}
       </nav>
 
-      <div className="hidden items-center gap-2 md:flex">
+      <div className={cn("hidden shrink-0 items-center md:flex", floating ? "gap-1.5" : "gap-2")}>
         {user ? (
           <div className="relative" ref={menuRef}>
             <button
@@ -117,18 +123,13 @@ export function NavbarClient({ user }: { user: NavUser | null }) {
               </span>
               <span className="max-w-32 truncate">{user.firstName}</span>
               {currentRole && (
-                <span className="rounded-full bg-canvas-alt px-2 py-0.5 text-xs font-semibold text-ink-muted">
-                  {currentRole === "host" ? "Hôte" : "Pro"}
-                </span>
+                <span className="rounded-full bg-canvas-alt px-2 py-0.5 text-xs font-bold text-ink-muted">{currentRole === "host" ? "Hôte" : "Pro"}</span>
               )}
               <ChevronDown className={cn("h-4 w-4 text-ink-muted transition-transform", menuOpen && "rotate-180")} aria-hidden />
             </button>
 
             {menuOpen && (
-              <div
-                role="menu"
-                className="absolute right-0 top-full mt-2 w-64 overflow-hidden rounded-2xl border border-line bg-surface p-1.5 shadow-raised"
-              >
+              <div role="menu" className="absolute right-0 top-full mt-2 w-64 overflow-hidden rounded-[20px] border border-line bg-surface p-1.5 shadow-raised">
                 {user.email && <p className="truncate px-3 pb-2 pt-2 text-xs text-ink-muted">{user.email}</p>}
                 {accountLinks.map(({ href, label, icon: Icon }) => (
                   <Link
@@ -144,11 +145,7 @@ export function NavbarClient({ user }: { user: NavUser | null }) {
                 ))}
                 <div className="my-1 border-t border-line" />
                 <form action={signOut}>
-                  <button
-                    type="submit"
-                    role="menuitem"
-                    className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-ink hover:bg-canvas-alt"
-                  >
+                  <button type="submit" role="menuitem" className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-ink hover:bg-canvas-alt">
                     <LogOut className="h-4 w-4 text-ink-muted" aria-hidden />
                     Se déconnecter
                   </button>
@@ -158,10 +155,22 @@ export function NavbarClient({ user }: { user: NavUser | null }) {
           </div>
         ) : (
           <>
-            <Link href={`/login${pathname && pathname !== "/" ? `?next=${encodeURIComponent(pathname)}` : ""}`} className={buttonClasses({ variant: "ghost", size: "sm" })}>
+            <Link
+              href={`/login${pathname && pathname !== "/" ? `?next=${encodeURIComponent(pathname)}` : ""}`}
+              className={cn(
+                "flex items-center whitespace-nowrap rounded-full font-semibold text-ink transition-colors hover:bg-canvas-alt",
+                floating ? "h-[46px] px-4 text-[15px]" : "h-10 px-[18px] text-sm"
+              )}
+            >
               Connexion
             </Link>
-            <Link href="/signup" className={buttonClasses({ variant: "primary", size: "sm" })}>
+            <Link
+              href="/signup"
+              className={cn(
+                "flex items-center whitespace-nowrap rounded-full bg-primary font-semibold text-on-primary transition-colors hover:bg-primary-hover",
+                floating ? "h-12 px-[22px] text-[15px]" : "h-10 px-5 text-sm"
+              )}
+            >
               Créer un compte
             </Link>
           </>
@@ -175,21 +184,22 @@ export function NavbarClient({ user }: { user: NavUser | null }) {
         aria-expanded={mobileOpen}
         aria-controls="menu-mobile"
         aria-label={mobileOpen ? "Fermer le menu" : "Ouvrir le menu"}
-        className="-mr-2 rounded-full p-2.5 text-ink hover:bg-canvas-alt md:hidden"
+        className="-mr-1 rounded-full p-2.5 text-ink hover:bg-canvas-alt md:hidden"
       >
         {mobileOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
       </button>
 
       {mobileOpen && (
-        <div id="menu-mobile" className="absolute inset-x-0 top-full border-b border-line bg-canvas px-4 pb-6 pt-2 shadow-raised md:hidden">
+        <div
+          id="menu-mobile"
+          className={cn(
+            "absolute inset-x-0 top-full border-line bg-canvas px-4 pb-6 pt-2 shadow-raised md:hidden",
+            floating ? "mt-2 rounded-[28px] border" : "border-b"
+          )}
+        >
           <nav aria-label="Navigation mobile" className="flex flex-col">
-            {(user ? accountLinks : PUBLIC_LINKS).map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                onClick={() => setMobileOpen(false)}
-                className="rounded-xl px-3 py-3 text-base font-medium text-ink hover:bg-canvas-alt"
-              >
+            {(user ? accountLinks : publicLinks(variant)).map((link) => (
+              <Link key={link.href} href={link.href} onClick={() => setMobileOpen(false)} className="rounded-xl px-3 py-3 text-base font-medium text-ink hover:bg-canvas-alt">
                 {link.label}
               </Link>
             ))}
