@@ -173,3 +173,34 @@
 .leaflet-control-attribution {
   font-size: 11px;
 }
+
+/* Accueil : dégradé pêche du hero et mot surligné façon stabilo */
+.hero-gradient {
+  background: linear-gradient(180deg, #ffd9cf 0%, #ffe8e0 30%, #fff3ee 62%, var(--canvas) 100%);
+}
+
+.highlighter {
+  background: linear-gradient(
+      100deg,
+      rgb(255 107 85 / 0%) 0%,
+      rgb(255 107 85 / 38%) 3%,
+      rgb(255 138 119 / 42%) 50%,
+      rgb(255 107 85 / 34%) 97%,
+      rgb(255 107 85 / 0%) 100%
+    )
+    no-repeat 0 82% / 100% 46%;
+  padding: 0 6px;
+  margin: 0 -6px;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not(.light) .hero-gradient {
+    background: linear-gradient(180deg, #3a2622 0%, #2c211e 40%, var(--canvas) 100%);
+  }
+}
+
+:root.dark .hero-gradient {
+  background: linear-gradient(180deg, #3a2622 0%, #2c211e 40%, var(--canvas) 100%);
+}

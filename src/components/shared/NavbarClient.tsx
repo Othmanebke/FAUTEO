@@ -78,12 +78,12 @@ export function NavbarClient({ user, variant = "bar" }: { user: NavUser | null; 
   // Lien de navigation : barre pilule (accueil) = texte encre ; barre classique = texte gris, actif sur fond
   const linkClass = (href: string) =>
     cn(
-      "whitespace-nowrap rounded-full px-3.5 py-[9px] text-[15px] transition-colors hover:bg-canvas-alt",
+      "whitespace-nowrap rounded-full py-[9px] text-[15px] transition-colors hover:bg-canvas-alt",
       floating
-        ? "font-medium text-ink"
+        ? "px-3 font-medium text-ink"
         : isActive(href)
-          ? "bg-canvas-alt font-semibold text-ink"
-          : "font-medium text-ink-muted hover:text-ink"
+          ? "bg-canvas-alt px-3.5 font-semibold text-ink"
+          : "px-3.5 font-medium text-ink-muted hover:text-ink"
     );
 
   return (
