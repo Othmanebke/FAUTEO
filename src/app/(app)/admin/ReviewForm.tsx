@@ -25,8 +25,12 @@ export function ReviewForm({ documentId }: { documentId: string }) {
       <input type="hidden" name="document_id" value={documentId} />
       {state.message && <Alert tone="danger">{state.message}</Alert>}
       {rejecting ? (
-        <>
+        <div className="space-y-3 rounded-[20px] border border-danger/25 bg-danger-subtle/60 p-4">
           <input type="hidden" name="decision" value="reject" />
+          <div>
+            <p className="text-sm font-bold text-danger">Refuser ce document</p>
+            <p className="text-[13px] text-ink-muted">Le motif sera affiché à l&apos;utilisateur.</p>
+          </div>
           <Select name="reason" label="Motif du refus" defaultValue="" error={state.fieldErrors?.reason}>
             <option value="" disabled>
               Choisir un motif
@@ -45,7 +49,7 @@ export function ReviewForm({ documentId }: { documentId: string }) {
               Annuler
             </Button>
           </div>
-        </>
+        </div>
       ) : (
         <div className="flex gap-2">
           <Button type="submit" name="decision" value="approve" size="sm" isLoading={pending}>

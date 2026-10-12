@@ -3,9 +3,9 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
-import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
-import { Alert } from "@/components/ui/Alert";
+import { FormError } from "./AuthHeading";
+import { OtpInput } from "./OtpInput";
 
 /** Saisie du code TOTP pour passer la session au niveau aal2. */
 export function MfaVerifyForm({ next }: { next: string }) {
@@ -40,20 +40,10 @@ export function MfaVerifyForm({ next }: { next: string }) {
   }
 
   return (
-    <form onSubmit={onSubmit} className="space-y-5" noValidate>
-      {error && <Alert tone="danger">{error}</Alert>}
-      <Input
-        name="code"
-        label="Code de vérification"
-        inputMode="numeric"
-        autoComplete="one-time-code"
-        pattern="[0-9]{6}"
-        maxLength={6}
-        required
-        value={code}
-        onChange={(e) => setCode(e.target.value.replace(/\D/g, ""))}
-        className="text-center text-xl tracking-[0.5em]"
-      />
+    <form onSubmit={onSubmit} className="flex flex-col gap-5" noValidate>
+      <OtpInput value={code} onChange={setCode} autoFocus invalid={Boolean(error)} />
+      <input type="hidden" name="code" value={code} />
+      {error && <FormError>{error}</FormError>}
       <Button type="submit" size="lg" fullWidth isLoading={pending} disabled={code.length !== 6}>
         Vérifier
       </Button>

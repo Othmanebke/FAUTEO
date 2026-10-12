@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { ShieldCheck, Smartphone } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/Button";
-import { Input } from "@/components/ui/Input";
+import { OtpInput } from "@/components/auth/OtpInput";
 import { Alert } from "@/components/ui/Alert";
 import { Badge } from "@/components/ui/Badge";
 
@@ -92,7 +92,9 @@ export function MfaSettings() {
     return (
       <div className="space-y-5">
         <div className="flex items-start gap-4">
-          <ShieldCheck className="h-6 w-6 shrink-0 text-success" aria-hidden />
+          <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-success-subtle">
+            <ShieldCheck className="h-6 w-6 text-success" aria-hidden />
+          </span>
           <div className="space-y-1">
             <div className="flex items-center gap-2">
               <h2 className="font-semibold text-ink">Double authentification</h2>
@@ -122,22 +124,17 @@ export function MfaSettings() {
           <li>Scannez ce QR code, ou saisissez la clé manuellement.</li>
           <li>Entrez le code à 6 chiffres affiché.</li>
         </ol>
-        <div className="flex flex-col items-center gap-3 rounded-2xl bg-white p-4 sm:flex-row">
+        <div className="flex flex-col items-center gap-5 rounded-[24px] border border-line bg-white p-5 sm:flex-row">
           {/* QR code SVG fourni par Supabase sous forme de data URL */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={enrollment.qrCode} alt="QR code d'activation" width={176} height={176} className="h-44 w-44" />
-          <code className="break-all rounded-xl bg-canvas-alt px-3 py-2 text-xs text-ink">{enrollment.secret}</code>
+          <div className="min-w-0 space-y-2">
+            <p className="text-sm font-semibold text-ink">Ou saisissez la clé manuellement</p>
+            <code className="block break-all rounded-xl bg-canvas-alt px-3 py-2 text-xs text-ink">{enrollment.secret}</code>
+          </div>
         </div>
         {error && <Alert tone="danger">{error}</Alert>}
-        <Input
-          label="Code de vérification"
-          inputMode="numeric"
-          autoComplete="one-time-code"
-          maxLength={6}
-          value={code}
-          onChange={(e) => setCode(e.target.value.replace(/\D/g, ""))}
-          className="text-center text-xl tracking-[0.5em]"
-        />
+        <OtpInput value={code} onChange={setCode} label="Code affiché dans l'application" invalid={Boolean(error)} />
         <div className="flex gap-3">
           <Button type="submit" isLoading={pending} disabled={code.length !== 6}>
             Activer
@@ -153,7 +150,9 @@ export function MfaSettings() {
   return (
     <div className="space-y-5">
       <div className="flex items-start gap-4">
-        <Smartphone className="h-6 w-6 shrink-0 text-ink-muted" aria-hidden />
+        <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-primary-subtle">
+          <Smartphone className="h-6 w-6 text-primary-ink" aria-hidden />
+        </span>
         <div className="space-y-1">
           <div className="flex items-center gap-2">
             <h2 className="font-semibold text-ink">Double authentification</h2>

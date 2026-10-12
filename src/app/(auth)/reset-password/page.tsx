@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { LockKeyhole } from "lucide-react";
 import { requireSession } from "@/lib/auth/session";
 import { AuthHeading } from "@/components/auth/AuthHeading";
 import { ResetPasswordForm } from "./ResetPasswordForm";
@@ -10,7 +11,7 @@ export default async function ResetPasswordPage() {
   await requireSession("/reset-password");
   return (
     <div className="flex flex-col gap-7">
-      <AuthHeading title="Nouveau mot de passe" subtitle="Choisissez un mot de passe que vous n'utilisez pas ailleurs." />
+      <AuthHeading icon={LockKeyhole} title="Nouveau mot de passe" subtitle="Choisissez un mot de passe que vous n'utilisez pas ailleurs." />
       <ResetPasswordForm />
     </div>
   );
