@@ -22,7 +22,7 @@ import { HomeRecommended } from "@/components/home/HomeRecommended";
 import { getPublicFees } from "@/lib/platform";
 import { getHomeData, type HomeStation } from "@/lib/home";
 import { PRICE_UNIT_LABELS, TRADE_LABELS } from "@/lib/labels";
-import { formatCents } from "@/lib/utils";
+import { formatCents, formatCentsFixed } from "@/lib/utils";
 import type { StationType, Trade } from "@/types";
 
 const HOW = [
@@ -187,12 +187,12 @@ export default async function HomePage() {
             {/* Visuel : téléphone + cartes flottantes (illustration) */}
             <div className="relative mt-16 h-[560px] w-full max-w-[1060px]">
               <PhoneMockup stations={home.featured.slice(0, 3)} />
-              <div aria-hidden className="absolute left-[150px] top-24 hidden lg:block">
+              <div aria-hidden className="absolute left-[150px] top-24 hidden xl:block">
                 <span className={glassPill}>
                   <ShieldCheck className="h-4 w-4" /> Caution non débitée
                 </span>
               </div>
-              <div aria-hidden className={`${glassCard} absolute left-10 top-[220px] hidden lg:block`}>
+              <div aria-hidden className={`${glassCard} absolute left-10 top-[220px] hidden xl:block`}>
                 <p className="text-sm text-ink-muted">Exemple : l&apos;hôte reçoit</p>
                 <p className="mt-2.5 text-[32px] font-bold tabular-nums tracking-[-0.02em] text-ink">{formatCents(examplePrice - hostFee)}</p>
                 <p className="mt-2.5 flex items-center gap-2 text-sm text-ink-muted">
@@ -201,7 +201,7 @@ export default async function HomePage() {
                 </p>
               </div>
               {rating && (
-                <div className={`${glassCard} absolute right-10 top-16 hidden lg:block`}>
+                <div className={`${glassCard} absolute right-10 top-16 hidden xl:block`}>
                   <span className="flex h-[42px] w-[42px] items-center justify-center rounded-full bg-primary-subtle">
                     <Star className="h-[18px] w-[18px] text-primary-ink" aria-hidden />
                   </span>
@@ -212,7 +212,7 @@ export default async function HomePage() {
                   <p className="mt-1.5 text-sm text-ink-muted">Note moyenne des postes</p>
                 </div>
               )}
-              <div aria-hidden className="absolute right-[140px] top-[300px] hidden lg:block">
+              <div aria-hidden className="absolute right-[140px] top-[300px] hidden xl:block">
                 <span className={glassPill}>
                   <FileSignature className="h-4 w-4" /> Contrat signé en ligne
                 </span>
@@ -331,15 +331,15 @@ export default async function HomePage() {
                 <div className="flex justify-between gap-4 border-b border-line py-4">
                   <dt className="text-ink-muted">Le pro paie</dt>
                   <dd className="text-right">
-                    <b className="tabular-nums">{formatCents(examplePrice + proFee)}</b>
-                    <span className="ml-2 text-ink-muted">dont {formatCents(proFee)} de frais</span>
+                    <b className="tabular-nums">{formatCentsFixed(examplePrice + proFee)}</b>
+                    <span className="ml-2 text-ink-muted">dont {formatCentsFixed(proFee)} de frais</span>
                   </dd>
                 </div>
                 <div className="flex justify-between gap-4 border-b border-line py-4">
                   <dt className="text-ink-muted">L&apos;hôte reçoit</dt>
                   <dd className="text-right">
-                    <b className="tabular-nums">{formatCents(examplePrice - hostFee)}</b>
-                    <span className="ml-2 text-ink-muted">après {formatCents(hostFee)} de commission</span>
+                    <b className="tabular-nums">{formatCentsFixed(examplePrice - hostFee)}</b>
+                    <span className="ml-2 text-ink-muted">après {formatCentsFixed(hostFee)} de commission</span>
                   </dd>
                 </div>
                 <div className="flex justify-between gap-4 pt-4">

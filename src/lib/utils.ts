@@ -13,3 +13,10 @@ const euroRound = new Intl.NumberFormat("fr-FR", { style: "currency", currency: 
 export function formatCents(cents: number): string {
   return cents % 100 === 0 ? euroRound.format(cents / 100) : euro.format(cents / 100);
 }
+
+const euroFixed = new Intl.NumberFormat("fr-FR", { style: "currency", currency: "EUR", minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+/** Montant en centimes, toujours avec deux décimales (« 57,00 € ») : détail de frais. */
+export function formatCentsFixed(cents: number): string {
+  return euroFixed.format(cents / 100);
+}

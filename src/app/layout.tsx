@@ -19,16 +19,15 @@ export const metadata: Metadata = {
   applicationName: "Fauteo",
 };
 
+// Mode clair forcé : les maquettes sont en clair, quel que soit le réglage du système
 export const viewport: Viewport = {
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#fff9f5" },
-    { media: "(prefers-color-scheme: dark)", color: "#1b1917" },
-  ],
+  themeColor: "#fff9f5",
+  colorScheme: "light",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="fr" className={`${manrope.variable} h-full scroll-smooth`}>
+    <html lang="fr" className={`${manrope.variable} light h-full scroll-smooth`} style={{ colorScheme: "light" }}>
       <body className="flex min-h-full flex-col bg-canvas font-sans text-ink antialiased">
         <FavoritesProvider>{children}</FavoritesProvider>
       </body>

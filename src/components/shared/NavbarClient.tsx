@@ -89,7 +89,7 @@ export function NavbarClient({ user, variant = "bar" }: { user: NavUser | null; 
   return (
     <>
       {/* Navigation desktop */}
-      <nav aria-label="Navigation principale" className={cn("hidden h-10 min-w-0 flex-1 flex-wrap justify-center overflow-hidden md:flex", floating ? "gap-0.5" : "gap-1")}>
+      <nav aria-label="Navigation principale" className={cn("hidden h-10 min-w-0 flex-1 flex-wrap justify-center overflow-hidden lg:flex", floating ? "gap-0.5" : "gap-1")}>
         {navLinks.map((link) => (
           <Link key={link.href} href={link.href} aria-current={isActive(link.href) ? "page" : undefined} className={linkClass(link.href)}>
             {link.label}
@@ -108,7 +108,7 @@ export function NavbarClient({ user, variant = "bar" }: { user: NavUser | null; 
         )}
       </nav>
 
-      <div className={cn("hidden shrink-0 items-center md:flex", floating ? "gap-1.5" : "gap-2")}>
+      <div className={cn("hidden shrink-0 items-center lg:flex", floating ? "gap-1.5" : "gap-2")}>
         {user ? (
           <div className="relative" ref={menuRef}>
             <button
@@ -184,7 +184,7 @@ export function NavbarClient({ user, variant = "bar" }: { user: NavUser | null; 
         aria-expanded={mobileOpen}
         aria-controls="menu-mobile"
         aria-label={mobileOpen ? "Fermer le menu" : "Ouvrir le menu"}
-        className="-mr-1 rounded-full p-2.5 text-ink hover:bg-canvas-alt md:hidden"
+        className="-mr-1 rounded-full p-2.5 text-ink hover:bg-canvas-alt lg:hidden"
       >
         {mobileOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
       </button>
@@ -193,7 +193,7 @@ export function NavbarClient({ user, variant = "bar" }: { user: NavUser | null; 
         <div
           id="menu-mobile"
           className={cn(
-            "absolute inset-x-0 top-full border-line bg-canvas px-4 pb-6 pt-2 shadow-raised md:hidden",
+            "absolute inset-x-0 top-full border-line bg-canvas px-4 pb-6 pt-2 shadow-raised lg:hidden",
             floating ? "mt-2 rounded-[28px] border" : "border-b"
           )}
         >

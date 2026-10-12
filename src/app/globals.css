@@ -42,31 +42,8 @@
   --shadow-raised: 0 12px 32px rgb(37 42 49 / 8%);
 }
 
-/* Mode sombre chaud (CDC §12), activable par préférence système ou classe .dark */
-@media (prefers-color-scheme: dark) {
-  :root:not(.light) {
-    --primary-subtle: #4a2a24;
-    --primary-ink: #ff8a77;
-    --canvas: #1b1917;
-    --canvas-alt: #221f1c;
-    --surface: #262320;
-    --surface-soft: #302a26;
-    --ink: #f4efe9;
-    --ink-muted: #b3aaa1;
-    --line: #3a3430;
-    --line-strong: #4a433e;
-    --success: #6fbf9f;
-    --success-subtle: #1f3129;
-    --danger: #e58a84;
-    --danger-subtle: #3a2321;
-    --warning: #d9a35a;
-    --warning-ink: #e2b26f;
-    --warning-subtle: #3a2e1d;
-    --shadow-card: 0 4px 20px rgb(0 0 0 / 25%);
-    --shadow-raised: 0 12px 32px rgb(0 0 0 / 35%);
-  }
-}
-
+/* Mode sombre chaud (CDC §12) : réservé à une future bascule manuelle (classe .dark).
+   Le site est en mode clair forcé, comme les maquettes, quel que soit le réglage système. */
 :root.dark {
   --primary-subtle: #4a2a24;
   --primary-ink: #ff8a77;
@@ -126,7 +103,7 @@
 
 @layer base {
   html {
-    color-scheme: light dark;
+    color-scheme: light;
   }
 
   body {
@@ -193,12 +170,6 @@
   margin: 0 -6px;
   -webkit-box-decoration-break: clone;
   box-decoration-break: clone;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root:not(.light) .hero-gradient {
-    background: linear-gradient(180deg, #3a2622 0%, #2c211e 40%, var(--canvas) 100%);
-  }
 }
 
 :root.dark .hero-gradient {
