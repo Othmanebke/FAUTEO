@@ -16,10 +16,12 @@ export async function VerificationCard({ userId, role }: { userId: string; role:
 
   if (verified) {
     return (
-      <div className="flex items-center gap-4 rounded-[var(--radius-card)] border border-success/25 bg-success-subtle p-5">
-        <BadgeCheck className="h-6 w-6 shrink-0 text-success" aria-hidden />
+      <div className="flex items-center gap-4 rounded-[24px] border border-success/25 bg-success-subtle p-5 sm:p-6">
+        <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-success text-white">
+          <BadgeCheck className="h-6 w-6" aria-hidden />
+        </span>
         <div>
-          <p className="font-semibold text-success">Profil vérifié</p>
+          <p className="text-[17px] font-bold text-success">Profil vérifié</p>
           <p className="text-sm text-ink-muted">
             {role === "pro" ? "Vous pouvez réserver un poste." : "Vos postes peuvent être mis en ligne."}
           </p>
@@ -32,12 +34,14 @@ export async function VerificationCard({ userId, role }: { userId: string; role:
   const pendingOnly = blocking.length > 0 && blocking.every((r) => r.status === "pending");
 
   return (
-    <div className="rounded-[var(--radius-card)] border border-warning/30 bg-warning-subtle p-5 sm:p-6">
+    <div className="rounded-[24px] border border-warning/30 bg-warning-subtle p-5 sm:p-6">
       <div className="flex gap-4">
-        <ShieldAlert className="h-6 w-6 shrink-0 text-warning-ink" aria-hidden />
+        <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-warning text-white">
+          <ShieldAlert className="h-6 w-6" aria-hidden />
+        </span>
         <div className="flex-1 space-y-3">
           <div>
-            <p className="font-semibold text-warning-ink">
+            <p className="text-[17px] font-bold text-warning-ink">
               {pendingOnly ? "Vérification en cours" : "Profil à compléter"}
             </p>
             <p className="text-sm leading-relaxed text-ink">
@@ -51,7 +55,7 @@ export async function VerificationCard({ userId, role }: { userId: string; role:
           {!pendingOnly && (
             <ul className="flex flex-wrap gap-2">
               {blocking.map((r) => (
-                <li key={r.type} className="rounded-full bg-surface px-3 py-1 text-sm font-medium text-ink">
+                <li key={r.type} className="rounded-full bg-surface px-3.5 py-1.5 text-sm font-semibold text-ink">
                   {DOCUMENT_LABELS[r.type].title}
                   {r.status === "pending" && <span className="text-ink-muted"> · en vérification</span>}
                   {(r.status === "rejected" || r.status === "expired") && <span className="text-danger"> · à redéposer</span>}

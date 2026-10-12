@@ -29,34 +29,36 @@ export default async function HostDashboardPage() {
       <div className="space-y-8">
         <VerificationCard userId={userId} role="host" />
 
-        <div className="grid gap-4 md:grid-cols-3">
-          <Card className="space-y-2">
-            <div className="flex items-center gap-2 text-ink-muted">
-              <Inbox className="h-4 w-4" aria-hidden />
-              <h2 className="text-sm font-semibold">Demandes en attente</h2>
+        <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+          <Card className="flex flex-col gap-5">
+            <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary-subtle text-primary-ink">
+              <Inbox className="h-6 w-6" aria-hidden />
+            </span>
+            <div className="space-y-1.5">
+              <h2 className="text-[15px] font-semibold text-ink-muted">Demandes en attente</h2>
+              <p className="text-[40px] font-bold leading-none tabular-nums tracking-[-0.02em] text-ink">{requests ?? 0}</p>
+              <p className="text-sm text-ink-muted">À accepter ou refuser sous 24 h.</p>
             </div>
-            <p className="text-3xl font-bold tabular-nums text-ink">{requests ?? 0}</p>
-            <p className="text-sm text-ink-muted">À accepter ou refuser sous 24 h.</p>
           </Card>
-          <Card className="space-y-2">
-            <div className="flex items-center gap-2 text-ink-muted">
-              <Armchair className="h-4 w-4" aria-hidden />
-              <h2 className="text-sm font-semibold">Postes</h2>
+          <Card className="flex flex-col gap-5">
+            <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary-subtle text-primary-ink">
+              <Armchair className="h-6 w-6" aria-hidden />
+            </span>
+            <div className="space-y-1.5">
+              <h2 className="text-[15px] font-semibold text-ink-muted">Postes</h2>
+              <p className="text-[40px] font-bold leading-none tabular-nums tracking-[-0.02em] text-ink">{stations ?? 0}</p>
+              <p className="text-sm text-ink-muted">Brouillons et annonces en ligne.</p>
             </div>
-            <p className="text-3xl font-bold tabular-nums text-ink">{stations ?? 0}</p>
-            <p className="text-sm text-ink-muted">Brouillons et annonces en ligne.</p>
           </Card>
-          <Card className="space-y-2">
-            <div className="flex items-center gap-2 text-ink-muted">
-              <CreditCard className="h-4 w-4" aria-hidden />
-              <h2 className="text-sm font-semibold">Versements</h2>
+          <Card className="flex flex-col gap-5">
+            <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary-subtle text-primary-ink">
+              <CreditCard className="h-6 w-6" aria-hidden />
+            </span>
+            <div className="space-y-1.5">
+              <h2 className="text-[15px] font-semibold text-ink-muted">Versements</h2>
+              {host?.stripe_ready ? <Badge variant="success">Compte de paiement actif</Badge> : <Badge variant="warning">À configurer</Badge>}
+              <p className="text-sm text-ink-muted">Compte Stripe Connect pour recevoir vos revenus.</p>
             </div>
-            {host?.stripe_ready ? (
-              <Badge variant="success">Compte de paiement actif</Badge>
-            ) : (
-              <Badge variant="warning">À configurer</Badge>
-            )}
-            <p className="text-sm text-ink-muted">Compte Stripe Connect pour recevoir vos revenus.</p>
           </Card>
         </div>
 

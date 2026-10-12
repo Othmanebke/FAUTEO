@@ -44,7 +44,27 @@ export async function DocumentsChecklist({ userId }: { userId: string }) {
     return <p className="text-sm text-ink-muted">Créez d&apos;abord votre profil pro ou hôte pour voir les documents à fournir.</p>;
   }
 
+  const approved = requirements.filter((r) => r.status === "approved").length;
+  const submitted = requirements.filter((r) => r.status === "approved" || r.status === "pending").length;
+  const percent = Math.round((approved / requirements.length) * 100);
+
   return (
+    <div className="space-y-5">
+      {/* Progression : documents validés sur documents exigés */}
+      <div className="rounded-[24px] border border-line bg-surface p-5 shadow-card">
+        <div className="flex flex-wrap items-baseline justify-between gap-2">
+          <p className="text-[15px] font-bold text-ink">
+            {approved} / {requirements.length} document{requirements.length > 1 ? "s" : ""} validé{requirements.length > 1 ? "s" : ""}
+          </p>
+          <p className="text-[13px] text-ink-muted">
+            {submitted - approved > 0 ? `${submitted - approved} en vérification · ` : ""}
+            {requirements.length - submitted > 0 ? `${requirements.length - submitted} à fournir` : "Tout est déposé"}
+          </p>
+        </div>
+        <div className="mt-3 h-2 overflow-hidden rounded-full bg-canvas-alt" role="progressbar" aria-label="Documents validés" aria-valuemin={0} aria-valuemax={100} aria-valuenow={percent}>
+          <div className="h-full rounded-full bg-success transition-[width]" style={{ width: `${Math.max(percent, approved ? percent : 2)}%` }} />
+        </div>
+      </div>
     <ul className="space-y-4">
       {requirements.map((req) => {
         const info = DOCUMENT_LABELS[req.type];
@@ -97,5 +117,6 @@ export async function DocumentsChecklist({ userId }: { userId: string }) {
         );
       })}
     </ul>
+    </div>
   );
 }

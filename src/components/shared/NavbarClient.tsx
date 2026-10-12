@@ -59,7 +59,9 @@ export function NavbarClient({ user, variant = "bar" }: { user: NavUser | null; 
   }, [menuOpen]);
 
   const bothRoles = Boolean(user?.isPro && user?.isHost);
-  const currentRole: AppRole | null = user ? (user.activeRole ?? (user.isPro ? "pro" : user.isHost ? "host" : null)) : null;
+  // L'espace affiché suit la page en cours (/pro ou /host), sinon le rôle actif enregistré
+  const pathRole: AppRole | null = pathname.startsWith("/host") ? "host" : pathname.startsWith("/pro") ? "pro" : null;
+  const currentRole: AppRole | null = user ? (pathRole ?? user.activeRole ?? (user.isPro ? "pro" : user.isHost ? "host" : null)) : null;
   const otherRole: AppRole = currentRole === "host" ? "pro" : "host";
 
   const accountLinks = user
@@ -96,15 +98,26 @@ export function NavbarClient({ user, variant = "bar" }: { user: NavUser | null; 
           </Link>
         ))}
         {user && bothRoles && (
-          <button
-            type="button"
-            disabled={pending}
-            onClick={() => startTransition(() => switchActiveRole(otherRole))}
-            className="inline-flex items-center gap-2 whitespace-nowrap rounded-full border border-line bg-surface px-4 py-2 text-sm font-semibold text-ink transition-colors hover:border-line-strong disabled:opacity-60"
-          >
-            <ArrowLeftRight className="h-4 w-4 text-primary" aria-hidden />
-            Passer en espace {otherRole === "host" ? "Hôte" : "Pro"}
-          </button>
+          <div role="group" aria-label="Espace" className="ml-2 flex h-10 items-center rounded-full bg-canvas-alt p-1">
+            {(["pro", "host"] as AppRole[]).map((role) => {
+              const active = currentRole === role;
+              return (
+                <button
+                  key={role}
+                  type="button"
+                  aria-pressed={active}
+                  disabled={pending}
+                  onClick={() => !active && startTransition(() => switchActiveRole(role))}
+                  className={cn(
+                    "flex h-8 items-center whitespace-nowrap rounded-full px-4 text-sm font-semibold transition-colors disabled:opacity-60",
+                    active ? "bg-surface text-ink shadow-card" : "text-ink-muted hover:text-ink"
+                  )}
+                >
+                  Espace {role === "host" ? "Hôte" : "Pro"}
+                </button>
+              );
+            })}
+          </div>
         )}
       </nav>
 

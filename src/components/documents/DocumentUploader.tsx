@@ -2,7 +2,8 @@
 
 import { useId, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Paperclip, Upload } from "lucide-react";
+import { Paperclip, Upload, UploadCloud } from "lucide-react";
+import { cn } from "@/lib/utils";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
@@ -37,20 +38,30 @@ export function DocumentUploader({ userId, type, needsExpiry, replaceDocumentId,
   const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
 
-  function onFileChange(e: React.ChangeEvent<HTMLInputElement>) {
+  const [dragging, setDragging] = useState(false);
+
+  function accept(selected: File | null): boolean {
     setError(null);
-    const selected = e.target.files?.[0] ?? null;
     if (selected && !ACCEPT.includes(selected.type)) {
       setError("Format non accepté. Utilisez un PDF ou une photo (JPG, PNG, HEIC).");
-      e.target.value = "";
-      return;
+      return false;
     }
     if (selected && selected.size > MAX_BYTES) {
       setError("Fichier trop lourd : 10 Mo maximum.");
-      e.target.value = "";
-      return;
+      return false;
     }
     setFile(selected);
+    return true;
+  }
+
+  function onFileChange(e: React.ChangeEvent<HTMLInputElement>) {
+    if (!accept(e.target.files?.[0] ?? null)) e.target.value = "";
+  }
+
+  function onDrop(e: React.DragEvent<HTMLLabelElement>) {
+    e.preventDefault();
+    setDragging(false);
+    accept(e.dataTransfer.files?.[0] ?? null);
   }
 
   async function onSubmit(e: React.FormEvent) {
@@ -95,17 +106,26 @@ export function DocumentUploader({ userId, type, needsExpiry, replaceDocumentId,
 
   return (
     <form onSubmit={onSubmit} className="space-y-3">
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-end">
-        <div className="flex-1">
-          <input ref={fileRef} id={inputId} type="file" accept={ACCEPT.join(",")} onChange={onFileChange} className="peer sr-only" />
-          <label
-            htmlFor={inputId}
-            className="flex h-12 cursor-pointer items-center gap-3 rounded-xl border border-dashed border-line-strong bg-canvas px-4 text-sm text-ink-muted transition-colors hover:border-primary hover:text-ink peer-focus-visible:outline-2 peer-focus-visible:outline-primary-ink"
-          >
-            <Paperclip className="h-4 w-4 shrink-0" aria-hidden />
-            <span className="truncate">{file ? file.name : "Choisir un fichier (PDF, JPG, PNG — 10 Mo max.)"}</span>
-          </label>
-        </div>
+      {/* Zone de dépôt : clic ou glisser-déposer */}
+      <input ref={fileRef} id={inputId} type="file" accept={ACCEPT.join(",")} onChange={onFileChange} className="peer sr-only" />
+      <label
+        htmlFor={inputId}
+        onDragOver={(e) => {
+          e.preventDefault();
+          setDragging(true);
+        }}
+        onDragLeave={() => setDragging(false)}
+        onDrop={onDrop}
+        className={cn(
+          "flex min-h-[104px] cursor-pointer flex-col items-center justify-center gap-1.5 rounded-[20px] border-2 border-dashed px-4 py-5 text-center transition-colors peer-focus-visible:outline-2 peer-focus-visible:outline-primary-ink",
+          dragging ? "border-primary bg-primary-subtle/50" : file ? "border-success/50 bg-success-subtle/40" : "border-line-strong bg-canvas hover:border-primary"
+        )}
+      >
+        {file ? <Paperclip className="h-5 w-5 text-success" aria-hidden /> : <UploadCloud className="h-6 w-6 text-primary-ink" aria-hidden />}
+        <span className="max-w-full truncate text-sm font-semibold text-ink">{file ? file.name : "Glissez votre fichier ici ou parcourez"}</span>
+        <span className="text-[13px] text-ink-muted">{file ? "Cliquez pour changer de fichier" : "PDF, JPG, PNG ou HEIC · 10 Mo maximum"}</span>
+      </label>
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-end">
         {needsExpiry && (
           <div className="sm:w-48">
             <Input type="date" label="Valable jusqu'au" value={expiresAt} onChange={(e) => setExpiresAt(e.target.value)} />

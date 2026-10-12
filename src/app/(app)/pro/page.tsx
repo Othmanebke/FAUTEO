@@ -26,25 +26,29 @@ export default async function ProDashboardPage() {
       <div className="space-y-8">
         <VerificationCard userId={userId} role="pro" />
 
-        <div className="grid gap-4 sm:grid-cols-2">
-          <Link href="/recherche" className="group block">
-            <Card interactive className="flex h-full items-start gap-4">
-              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-primary-subtle text-primary-ink">
-                <Search className="h-5 w-5" aria-hidden />
+        <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-[1.6fr_1fr]">
+          {/* Grande carte d'appel à l'action */}
+          <Link
+            href="/recherche"
+            className="group relative flex min-h-[240px] flex-col justify-end overflow-hidden rounded-[28px] p-7 text-white shadow-raised transition-transform hover:-translate-y-0.5"
+          >
+            <div aria-hidden className="absolute inset-0 bg-[radial-gradient(120%_90%_at_85%_0%,#ffb39f_0%,#ff8a72_28%,#c2412f_60%,#252a31_100%)]" />
+            <div aria-hidden className="absolute inset-0 bg-[linear-gradient(180deg,rgb(37_42_49/0%)_20%,rgb(37_42_49/70%)_100%)]" />
+            <div className="relative space-y-3">
+              <h2 className="text-[26px] font-bold leading-tight tracking-[-0.02em]">Trouver un poste</h2>
+              <p className="max-w-md text-[15px] text-white/88">Recherche par métier, lieu et dates, avec vue liste et carte.</p>
+              <span className="inline-flex h-11 items-center gap-2 rounded-full bg-white px-5 text-sm font-semibold text-ink">
+                <Search className="h-4 w-4" aria-hidden /> Rechercher
               </span>
-              <div className="space-y-1">
-                <h2 className="font-semibold text-ink">Trouver un poste</h2>
-                <p className="text-sm leading-relaxed text-ink-muted">Recherche par métier, lieu et dates, avec vue liste et carte.</p>
-              </div>
-            </Card>
+            </div>
           </Link>
-          <Card className="flex items-start gap-4">
-            <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-canvas-alt text-ink">
-              <CalendarDays className="h-5 w-5" aria-hidden />
+          <Card className="flex flex-col justify-between gap-6">
+            <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary-subtle text-primary-ink">
+              <CalendarDays className="h-6 w-6" aria-hidden />
             </span>
-            <div className="space-y-1">
-              <h2 className="font-semibold text-ink">Réservations à venir</h2>
-              <p className="text-3xl font-bold tabular-nums text-ink">{upcoming ?? 0}</p>
+            <div>
+              <p className="text-[40px] font-bold leading-none tabular-nums tracking-[-0.02em] text-ink">{upcoming ?? 0}</p>
+              <h2 className="mt-2 text-[15px] font-semibold text-ink-muted">Réservations à venir</h2>
             </div>
           </Card>
         </div>

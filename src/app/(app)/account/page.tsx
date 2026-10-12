@@ -47,14 +47,14 @@ export default async function AccountPage({ searchParams }: { searchParams: Sear
         </Alert>
       )}
 
-      <div className="grid gap-8 lg:grid-cols-[1.4fr_1fr]">
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-[1.4fr_1fr] lg:gap-8">
         <div className="space-y-4">
-          <Card className="flex flex-wrap items-center gap-3">
-            <span className="flex h-12 w-12 items-center justify-center rounded-full bg-primary-subtle text-lg font-bold text-primary-ink">
+          <Card className="flex flex-wrap items-center gap-4">
+            <span className="flex h-16 w-16 items-center justify-center rounded-full bg-primary-subtle text-2xl font-bold text-primary-ink">
               {(profile.first_name || email || "?").charAt(0).toUpperCase()}
             </span>
             <div className="mr-auto">
-              <p className="font-semibold text-ink">
+              <p className="text-[20px] font-bold text-ink">
                 {profile.first_name} {profile.last_name}
               </p>
               <p className="text-sm text-ink-muted">{profile.city}</p>
@@ -66,7 +66,9 @@ export default async function AccountPage({ searchParams }: { searchParams: Sear
           <nav aria-label="Rubriques du compte" className="overflow-hidden rounded-[var(--radius-card)] border border-line bg-surface shadow-card">
             {links.map(({ href, icon: Icon, title, text }) => (
               <Link key={href + title} href={href} className="flex items-center gap-4 border-b border-line px-5 py-4 last:border-b-0 hover:bg-canvas">
-                <Icon className="h-5 w-5 shrink-0 text-ink-muted" aria-hidden />
+                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-canvas-alt text-ink">
+                  <Icon className="h-5 w-5" aria-hidden />
+                </span>
                 <span className="flex-1">
                   <span className="block font-semibold text-ink">{title}</span>
                   <span className="block text-sm text-ink-muted">{text}</span>
