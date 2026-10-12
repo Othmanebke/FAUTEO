@@ -62,7 +62,7 @@ export default async function HostDashboardPage() {
 
         <section aria-labelledby="mes-postes" className="space-y-4">
           <div className="flex items-center gap-2">
-            <h2 id="mes-postes" className="text-lg font-bold text-ink">
+            <h2 id="mes-postes" className="text-[22px] font-bold text-ink">
               Mes postes
             </h2>
             <Badge variant="neutral">Création d&apos;annonce bientôt disponible</Badge>

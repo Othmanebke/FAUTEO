@@ -79,11 +79,11 @@ export default async function AccountPage({ searchParams }: { searchParams: Sear
 
         <div className="space-y-4">
           <Card>
-            <h2 className="mb-4 text-lg font-bold text-ink">Mot de passe</h2>
+            <h2 className="mb-4 text-[22px] font-bold text-ink">Mot de passe</h2>
             <ChangePasswordForm />
           </Card>
           <Card className="space-y-3">
-            <h2 className="text-lg font-bold text-ink">Vos données</h2>
+            <h2 className="text-[22px] font-bold text-ink">Vos données</h2>
             <p className="text-sm leading-relaxed text-ink-muted">
               Téléchargez une copie des données personnelles associées à votre compte (RGPD).
             </p>

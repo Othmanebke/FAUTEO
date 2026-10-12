@@ -27,10 +27,10 @@ export function EmptyState({
 
 export function PageHeader({ title, subtitle, action }: { title: string; subtitle?: string; action?: React.ReactNode }) {
   return (
-    <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-      <div className="space-y-1.5">
-        <h1 className="text-3xl font-bold tracking-tight text-ink">{title}</h1>
-        {subtitle && <p className="text-[15px] text-ink-muted">{subtitle}</p>}
+    <div className="mb-10 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+      <div className="space-y-2">
+        <h1 className="text-[32px] font-bold tracking-[-0.02em] text-ink sm:text-[40px]">{title}</h1>
+        {subtitle && <p className="text-[17px] text-ink-muted">{subtitle}</p>}
       </div>
       {action}
     </div>

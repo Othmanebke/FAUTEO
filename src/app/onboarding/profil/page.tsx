@@ -27,7 +27,7 @@ export default async function OnboardingProfilePage({ searchParams }: { searchPa
   return (
     <>
       <Steps current={2} />
-      <h1 className="text-3xl font-bold tracking-tight text-ink">Votre profil</h1>
+      <h1 className="text-[32px] font-bold tracking-[-0.02em] text-ink sm:text-[40px]">Votre profil</h1>
       <p className="mt-2 text-[15px] leading-relaxed text-ink-muted">
         Ces informations figurent sur vos contrats et vos factures. Elles restent modifiables depuis votre compte.
       </p>

@@ -50,7 +50,7 @@ export default async function ProDashboardPage() {
         </div>
 
         <section aria-labelledby="mes-reservations" className="space-y-4">
-          <h2 id="mes-reservations" className="text-lg font-bold text-ink">
+          <h2 id="mes-reservations" className="text-[22px] font-bold text-ink">
             Mes réservations
           </h2>
           <EmptyState

@@ -53,7 +53,7 @@ export default async function AdminPage() {
       </div>
 
       <section aria-labelledby="file-kyc" className="space-y-4">
-        <h2 id="file-kyc" className="text-lg font-bold text-ink">
+        <h2 id="file-kyc" className="text-[22px] font-bold text-ink">
           File de vérification
         </h2>
         {!pending?.length ? (

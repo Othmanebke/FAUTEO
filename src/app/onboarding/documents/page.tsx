@@ -16,7 +16,7 @@ export default async function OnboardingDocumentsPage() {
   return (
     <>
       <Steps current={3} />
-      <h1 className="text-3xl font-bold tracking-tight text-ink">Vos documents</h1>
+      <h1 className="text-[32px] font-bold tracking-[-0.02em] text-ink sm:text-[40px]">Vos documents</h1>
       <p className="mt-2 text-[15px] leading-relaxed text-ink-muted">
         {profile.is_host && profile.is_pro
           ? "Ils conditionnent la réservation d'un poste et la mise en ligne de vos annonces."

@@ -18,7 +18,7 @@ function Section({ title, description, children }: { title: string; description?
   return (
     <Card className="space-y-5 sm:p-8">
       <div className="space-y-1">
-        <h2 className="text-lg font-bold text-ink">{title}</h2>
+        <h2 className="text-[22px] font-bold text-ink">{title}</h2>
         {description && <p className="text-sm leading-relaxed text-ink-muted">{description}</p>}
       </div>
       {children}

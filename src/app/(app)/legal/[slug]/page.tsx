@@ -26,7 +26,7 @@ export default async function LegalPage({ params }: { params: Params }) {
 
   return (
     <article className="max-w-2xl space-y-4">
-      <h1 className="text-3xl font-bold tracking-tight text-ink">{title}</h1>
+      <h1 className="text-[32px] font-bold tracking-[-0.02em] text-ink sm:text-[40px]">{title}</h1>
       <p className="text-[15px] leading-relaxed text-ink-muted">
         Ce document est en cours de rédaction et sera publié avant l&apos;ouverture du service.
       </p>

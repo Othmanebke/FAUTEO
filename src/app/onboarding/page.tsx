@@ -29,7 +29,7 @@ export default async function OnboardingRolesPage() {
   return (
     <>
       <Steps current={1} />
-      <h1 className="text-3xl font-bold tracking-tight text-ink">
+      <h1 className="text-[32px] font-bold tracking-[-0.02em] text-ink sm:text-[40px]">
         Bienvenue{profile.first_name ? `, ${profile.first_name}` : ""}
       </h1>
       <p className="mt-2 text-[15px] leading-relaxed text-ink-muted">
@@ -54,7 +54,7 @@ export default async function OnboardingRolesPage() {
               <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary-subtle text-primary-ink">
                 <Icon className="h-6 w-6" aria-hidden />
               </span>
-              <span className="mt-5 text-lg font-bold text-ink">{title}</span>
+              <span className="mt-5 text-[20px] font-bold text-ink">{title}</span>
               <span className="mt-2 text-sm leading-relaxed text-ink-muted">{text}</span>
               {held[value] && <span className="mt-4 text-xs font-semibold text-success">Profil déjà créé, vous pourrez le compléter</span>}
             </label>
